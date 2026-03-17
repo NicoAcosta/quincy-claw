@@ -24,6 +24,7 @@ export function createClaude(onMessage, onError) {
   let consecutiveFailures = 0;
   let lastFailTime = 0;
   let killed = false;
+  let killGeneration = 0;
   // Eagerly build prompt so warnings are available immediately
   const { prompt: staticPrompt, warnings: promptWarnings } = buildSystemPrompt();
   let cachedStaticPrompt = staticPrompt;
@@ -42,6 +43,7 @@ export function createClaude(onMessage, onError) {
   function send(text) {
     if (killed) return;
 
+    const myGeneration = killGeneration;
     const engineState = status();
     const systemPrompt = getSystemPrompt(engineState);
 
@@ -139,7 +141,8 @@ export function createClaude(onMessage, onError) {
     claude.on('close', (code) => {
       activeProcess = null;
 
-      if (killed) return;
+      // Skip if this process was intentionally killed (e.g. Ctrl+L)
+      if (killed || myGeneration !== killGeneration) return;
 
       if (code !== 0 && !gotResponse) {
         const now = Date.now();
@@ -176,6 +179,7 @@ export function createClaude(onMessage, onError) {
 
   function kill() {
     killed = true;
+    killGeneration++;
     if (activeProcess) {
       activeProcess.kill('SIGTERM');
       activeProcess = null;
