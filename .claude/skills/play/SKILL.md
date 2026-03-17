@@ -1,6 +1,6 @@
 ---
 name: play
-description: "Quincy Claw: One-shot music generation with Strudel. Use when: (1) user asks to play, create, or generate music, (2) user mentions genres like techno, house, DnB, jazz, ambient, trap, lo-fi, trance, dubstep, UK garage, synthwave, breakbeat, (3) user gives musical feedback like 'darker', 'more energy', 'add bass', (4) user uses producer terms like 'sidechain', '808', 'acid bass', 'Reese', 'wobble', 'arp', (5) user asks to modify or iterate on a playing pattern, (6) user shares a Strudel code snippet. Part of the Quincy Claw family (/quincy, /play, /studio, /vibe)."
+description: "Quincy Claw: One-shot music generation with Strudel. Use when: (1) user asks to play, create, or generate music, (2) user mentions genres like techno, house, DnB, jazz, ambient, trap, lo-fi, trance, dubstep, UK garage, synthwave, breakbeat, (3) user gives musical feedback like 'darker', 'more energy', 'add bass', (4) user uses producer terms like 'sidechain', '808', 'acid bass', 'Reese', 'wobble', 'arp', (5) user asks to modify or iterate on a playing pattern, (6) user shares a Strudel code snippet."
 ---
 
 # Play — One-Shot Music Generation with Strudel
@@ -9,12 +9,7 @@ You are a music producer and live coder. The user gives musical instructions and
 
 ## Playback
 
-Use Playwright (`mcp__plugin_playwright`) to control strudel.cc:
-1. `browser_navigate` to `https://strudel.cc`
-2. Clear the editor and paste the generated code
-3. `browser_press_key` Ctrl+Enter to evaluate and play
-
-If Playwright is unavailable, output the Strudel code for the user to paste into https://strudel.cc manually.
+Playback instructions are in CLAUDE.md (single source of truth). Follow those steps exactly.
 
 ## Production Thinking
 
@@ -27,13 +22,13 @@ Before generating code, consider:
 ## References
 
 Read these as needed for detailed syntax, recipes, and theory:
-- **Strudel API**: [references/strudel-api.md](references/strudel-api.md) — full syntax, effects, synthesis, samples, mini-notation
-- **Production Craft**: [references/production-craft.md](references/production-craft.md) — frequency allocation, gain hierarchy, space, density, palette coherence
-- **Groove & Rhythm**: [references/groove-and-rhythm.md](references/groove-and-rhythm.md) — beat anatomy, swing values, ghost notes, micro-arrangement
-- **Sound Design**: [references/sound-design.md](references/sound-design.md) — producer vocab translations, sound design recipes, bass design
-- **Genres**: [references/genres.md](references/genres.md) — sub-styles, BPM ranges, sonic palettes, genre identity rules
-- **Arrangement**: [references/arrangement.md](references/arrangement.md) — energy curves, evolution toolkit, transitions, build/drop patterns
-- **Music Theory**: [references/music-theory.md](references/music-theory.md) — scales, chords, progressions, tension/release, voicings
+- **Strudel API**: [references/strudel-api.md](references/strudel-api.md) — read when writing any Strudel code (full syntax, effects, synthesis, samples, mini-notation)
+- **Production Craft**: [references/production-craft.md](references/production-craft.md) — read when planning layers and mix (frequency allocation, gain hierarchy, density, palette)
+- **Groove & Rhythm**: [references/groove-and-rhythm.md](references/groove-and-rhythm.md) — read when building drum patterns (beat anatomy, swing values, ghost notes)
+- **Sound Design**: [references/sound-design.md](references/sound-design.md) — read when translating producer vocabulary (Reese, 808, acid, wobble) to Strudel
+- **Genres**: [references/genres.md](references/genres.md) — read when choosing or blending genres (sub-styles, BPM ranges, sonic palettes, identity rules)
+- **Arrangement**: [references/arrangement.md](references/arrangement.md) — read when adding evolution or transitions (energy curves, build/drop, micro-arrangement)
+- **Music Theory**: [references/music-theory.md](references/music-theory.md) — read when building chord progressions or choosing scales (voicings, tension/release)
 
 Genre templates live in `strudel/genres/` — read the relevant template before generating code.
 

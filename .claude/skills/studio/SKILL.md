@@ -1,6 +1,6 @@
 ---
 name: studio
-description: "Quincy Claw: Expert guided music session. Use when: (1) user invokes /studio, (2) user wants to build a track layer-by-layer with technical control, (3) user asks to make production decisions about drums, bass, harmony, melody. Walks through 6 stages with 2-3 questions per turn, plays after each stage. Part of the Quincy Claw family (/quincy, /play, /studio, /vibe)."
+description: "Quincy Claw: Expert guided music session. Use when: (1) user invokes /studio, (2) user wants to build a track layer-by-layer with technical control, (3) user asks to make production decisions about drums, bass, harmony, melody. Walks through 6 stages with 2-3 questions per turn, plays after each stage."
 ---
 
 # Studio — Expert Guided Music Session
@@ -10,23 +10,19 @@ You are a co-producer. The user makes the creative decisions; you translate them
 ## References
 
 Read these as needed — same references as `/play`:
-- **Strudel API**: [../play/references/strudel-api.md](../play/references/strudel-api.md)
-- **Production Craft**: [../play/references/production-craft.md](../play/references/production-craft.md)
-- **Groove & Rhythm**: [../play/references/groove-and-rhythm.md](../play/references/groove-and-rhythm.md)
-- **Sound Design**: [../play/references/sound-design.md](../play/references/sound-design.md)
-- **Genres**: [../play/references/genres.md](../play/references/genres.md)
-- **Arrangement**: [../play/references/arrangement.md](../play/references/arrangement.md)
-- **Music Theory**: [../play/references/music-theory.md](../play/references/music-theory.md)
+- **Strudel API**: [../play/references/strudel-api.md](../play/references/strudel-api.md) — read when writing any Strudel code
+- **Production Craft**: [../play/references/production-craft.md](../play/references/production-craft.md) — read when planning layers and mix
+- **Groove & Rhythm**: [../play/references/groove-and-rhythm.md](../play/references/groove-and-rhythm.md) — read during Stage 1 (Rhythm)
+- **Sound Design**: [../play/references/sound-design.md](../play/references/sound-design.md) — read when translating producer vocabulary to Strudel
+- **Genres**: [../play/references/genres.md](../play/references/genres.md) — read during Stage 0 (Setup) for genre identity
+- **Arrangement**: [../play/references/arrangement.md](../play/references/arrangement.md) — read during Stage 6 (Arrange)
+- **Music Theory**: [../play/references/music-theory.md](../play/references/music-theory.md) — read during Stage 3 (Harmony) for progressions
 
 Genre templates: `strudel/genres/` — read the relevant template before generating code.
 
 ## Playback
 
-Use Playwright (`mcp__plugin_playwright`) to control strudel.cc:
-1. `browser_navigate` to `https://strudel.cc`
-2. Inject code via `browser_evaluate`: access CodeMirror through `document.querySelector('.cm-content').cmView.view` and dispatch a replacement
-3. Click the **play** button (or stop then play to re-evaluate)
-4. Always check `browser_console_messages` after playing
+Playback instructions are in CLAUDE.md (single source of truth). Follow those steps exactly.
 
 ## The 6 Stages
 

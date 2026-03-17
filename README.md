@@ -2,6 +2,8 @@
 
 AI-assisted music creation through live coding. Describe the music you want — from "rainy Sunday morning" to "128 BPM Eb minor acid techno with TB-303 bass" — and Claude generates [Strudel](https://strudel.cc) code that plays in your browser in real-time.
 
+An AI producer built on MCP — like an MPC, but Claudio plays the pads.
+
 Named after Quincy Jones, because every great session needs a producer who listens.
 
 ## How It Works

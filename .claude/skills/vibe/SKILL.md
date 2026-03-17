@@ -1,6 +1,6 @@
 ---
 name: vibe
-description: "Quincy Claw: Feel-based guided music session. Use when: (1) user invokes /vibe, (2) user describes music with feelings, imagery, or scenes rather than technical terms (e.g., 'rainy afternoon', 'driving at night', 'floating in space'), (3) user wants music without needing to know production vocabulary. Translates emotions to sound through 4 atmospheric stages. Part of the Quincy Claw family (/quincy, /play, /studio, /vibe)."
+description: "Quincy Claw: Feel-based guided music session. Use when: (1) user invokes /vibe, (2) user describes music with feelings, imagery, or scenes rather than technical terms (e.g., 'rainy afternoon', 'driving at night', 'floating in space'), (3) user wants music without needing to know production vocabulary. Translates emotions to sound through 4 atmospheric stages."
 ---
 
 # Vibe — Feel-Based Music Session
@@ -12,23 +12,19 @@ You are a musical translator. The user speaks in feelings; you think in producti
 ## References
 
 Read these as needed — same references as `/play`:
-- **Strudel API**: [../play/references/strudel-api.md](../play/references/strudel-api.md)
-- **Production Craft**: [../play/references/production-craft.md](../play/references/production-craft.md)
-- **Groove & Rhythm**: [../play/references/groove-and-rhythm.md](../play/references/groove-and-rhythm.md)
-- **Sound Design**: [../play/references/sound-design.md](../play/references/sound-design.md)
-- **Genres**: [../play/references/genres.md](../play/references/genres.md)
-- **Arrangement**: [../play/references/arrangement.md](../play/references/arrangement.md)
-- **Music Theory**: [../play/references/music-theory.md](../play/references/music-theory.md)
+- **Strudel API**: [../play/references/strudel-api.md](../play/references/strudel-api.md) — read when writing any Strudel code
+- **Production Craft**: [../play/references/production-craft.md](../play/references/production-craft.md) — read when planning layers and mix
+- **Groove & Rhythm**: [../play/references/groove-and-rhythm.md](../play/references/groove-and-rhythm.md) — read during Stage 2 (The Pulse)
+- **Sound Design**: [../play/references/sound-design.md](../play/references/sound-design.md) — read when choosing sound character for imagery
+- **Genres**: [../play/references/genres.md](../play/references/genres.md) — read when translating imagery to genre
+- **Arrangement**: [../play/references/arrangement.md](../play/references/arrangement.md) — read during Stage 4 (The Spark) for evolution
+- **Music Theory**: [../play/references/music-theory.md](../play/references/music-theory.md) — read when building chord progressions or choosing scales
 
 Genre templates: `strudel/genres/` — read the relevant template before generating code.
 
 ## Playback
 
-Use Playwright (`mcp__plugin_playwright`) to control strudel.cc:
-1. `browser_navigate` to `https://strudel.cc`
-2. Inject code via `browser_evaluate`: access CodeMirror through `document.querySelector('.cm-content').cmView.view` and dispatch a replacement
-3. Click the **play** button (or stop then play to re-evaluate)
-4. Always check `browser_console_messages` after playing
+Playback instructions are in CLAUDE.md (single source of truth). Follow those steps exactly.
 
 ## Vibe-to-Parameters Translation
 
