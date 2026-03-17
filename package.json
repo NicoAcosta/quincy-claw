@@ -3,6 +3,18 @@
   "version": "1.0.0",
   "description": "AI music production skills for Strudel live coding",
   "repository": "https://github.com/NicoAcosta/quincy-claw",
-  "keywords": ["music", "strudel", "live-coding", "ai", "skills"],
-  "license": "MIT"
+  "keywords": [
+    "music",
+    "strudel",
+    "live-coding",
+    "ai",
+    "skills"
+  ],
+  "license": "MIT",
+  "scripts": {
+    "engine": "cd engine && node index.js"
+  },
+  "dependencies": {
+    "quincy-claw": "github:nicoacosta/quincy-claw"
+  }
 }
