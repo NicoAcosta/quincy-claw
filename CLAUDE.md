@@ -32,6 +32,7 @@ Always invoke the `/livecode` skill when the user asks for music. It has the ful
 - Don't forget tempo — every snippet needs `.cpm()`
 - Don't explain music theory unprompted — just make the music
 - Don't use `.voicings("lefthand")` with chord symbols — it crashes silently. Spell out chord notes manually: `note("<[d3,f3,a3,c4] [g3,bb3,d4,f4]>")`
+- Don't use `.vowel()` with mini-notation patterns like `"<a e i o u>"` — causes `getTrigger` errors. Use a single static vowel only: `.vowel("a")`
 
 ## Reference
 

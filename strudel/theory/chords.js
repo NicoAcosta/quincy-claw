@@ -1,9 +1,9 @@
 // Chord Progression Reference for Strudel
-// Use with note() and .voicings("lefthand") or manual voicings
+// Always spell out chord notes manually — DO NOT use .voicings() (it crashes)
 
 // === Notation in Strudel ===
 // Triads: note("c3 e3 g3") or note("[c3,e3,g3]") for simultaneous
-// With voicings: note("<Cm7 Fm7 Bbm7 Eb7>").voicings("lefthand")
+// Manual voicings: note("<[c3,eb3,g3,bb3] [f3,ab3,c4,eb4] [bb2,d3,f3,ab3] [eb3,g3,bb3,d4]>")
 
 // === Common Progressions by Genre ===
 
