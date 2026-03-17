@@ -81,11 +81,11 @@ Chat-dominant with ambient peripherals. The conversation is the center of gravit
 
 ### Regions
 
-1. **Waveform strip** (top, 2 lines) — ASCII waveform using block characters (`▁▂▃▄▅▆▇█`). Updates at ~15fps. Maps AnalyserNode frequency data to character heights. Shows silence as flat line when stopped.
+1. **Waveform strip** (top, 2 lines) — ASCII waveform using block characters (`▁▂▃▄▅▆▇█`). Updates at ~15fps. Maps AnalyserNode frequency data to character heights. When stopped, shows a subtle breathing animation (slow sine wave modulating a few center bins) rather than a flat line — makes the TUI feel alive.
 
-2. **Status bar** (1 line) — state icon (♫/⏹), BPM, key, pattern description (first ~40 chars of code or user label). Color-coded: green when playing, dim when stopped, red on error.
+2. **Status bar** (1 line) — state icon (♫/⏹), elapsed time since playback started (`2:34`), BPM, pattern label or truncated code. Color-coded: green when playing, dim when stopped, red on error. Example: `♫ 2:34 · 122 BPM · jazzy smooth house`
 
-3. **Chat panel** (fills remaining space, scrollable) — conversation history. User messages right-aligned or prefixed with `you:`. Claude messages prefixed with `claude:`. Code blocks rendered with syntax highlighting (chalk). Streams Claude's response token-by-token as it arrives.
+3. **Chat panel** (fills remaining space, scrollable) — conversation history. User messages right-aligned or prefixed with `you:`. Claude messages prefixed with `claude:`. Code blocks rendered with syntax highlighting (chalk). Streams Claude's response token-by-token as it arrives. Shows a pulsing `claude is thinking...` indicator between message send and first token received. **Auto-scroll**: scrolls to bottom on new content, but holds position if the user has manually scrolled up. When held, shows a dim `↓ new` indicator at the bottom edge. On startup, shows a welcome message with engine status and a hint: `Describe what you want to hear.`
 
 4. **Input bar** (bottom, 1 line) — text input with prompt `> `. Transport status indicators on the right.
 
@@ -101,7 +101,7 @@ Root component. Manages:
 Reads AnalyserNode frequency data via the master analyser (see Engine Changes). Uses `setInterval` at ~66ms (15fps). Calls `analyser.getByteFrequencyData(buffer)` directly on the node-web-audio-api AnalyserNode (returns `Uint8Array` 0-255). Maps bins to block characters. Renders as a `<Text>` inside a fixed-height `<Box>`. Uses `process.stdout.columns` for dynamic width on terminal resize.
 
 ### `<StatusBar>`
-Reads engine state via `status()` from core.js. Shows: play state, CPS converted to BPM (`cps * 60 * 4` — assumes 4/4 time, which is correct for Strudel's default 1 cycle = 1 bar), truncated code string. Updates on engine state change.
+Reads engine state via `status()` from core.js. Shows: state icon, elapsed time, BPM (from `cps * 60 * 4` — assumes 4/4 time, correct for Strudel default), and pattern label (or truncated code as fallback). Updates on engine state change and every second for elapsed time.
 
 ### `<ChatPanel>`
 Uses Ink's `<Static>` for committed messages (won't re-render) and a live `<Box>` for the streaming current response. Each message is a `<ChatMessage>` component with role styling. **Important**: messages are only moved to `<Static>` after Claude's response stream is fully complete (stream closed for that turn). Moving a message to `<Static>` while still streaming would freeze it mid-sentence.
@@ -125,13 +125,44 @@ const claude = spawn('claude', [
   '--input-format', 'stream-json',
   '--allowedTools', 'Bash(curl *)',
   '--append-system-prompt', systemPrompt,
-], { stdio: ['pipe', 'pipe', 'pipe'] });
+], {
+  stdio: ['pipe', 'pipe', 'pipe'],
+  cwd: projectRoot, // must be livecode root, not engine/, so Claude can read skill files
+});
 ```
 
-The system prompt includes:
-- The Strudel API reference (from skill files)
-- Instructions to use `curl` to POST to `localhost:3456` for playback
-- Genre templates and production knowledge
+### System Prompt Loading
+
+The system prompt is assembled at startup by reading the existing skill reference files:
+
+```
+<project-root>/
+  .claude/skills/play/references/strudel-api.md     — Strudel syntax reference
+  .claude/skills/play/references/genres.md           — Genre templates and conventions
+  .claude/skills/play/references/production-craft.md — Mix, frequency allocation, gain hierarchy
+  .claude/skills/play/references/sound-design.md     — Producer vocabulary → Strudel mappings
+  .claude/skills/play/references/groove-and-rhythm.md — Beat anatomy, swing
+  strudel/genres/*.js                                — Genre template code
+```
+
+The `claude.js` module reads these files at startup with `fs.readFileSync`, concatenates them into `systemPrompt`, and prepends playback instructions:
+
+```
+You are a music producer. The user describes music, you generate Strudel code.
+To play: curl -s -X POST http://localhost:3456/play -H 'Content-Type: application/json' -d '{"code": "...", "label": "short description"}'
+To swap: POST /swap (same format). To stop: POST /stop.
+Always include a "label" field with a short human-readable description.
+[... reference files concatenated below ...]
+```
+
+### Auto-Restart and Session Continuity
+
+If the Claude subprocess exits unexpectedly:
+1. Show a dim `Reconnecting...` message in the chat panel
+2. Wait 2 seconds (backoff)
+3. Respawn with the same flags
+4. Inject the current engine state into the new session's system prompt: append `\nCurrently playing: <label>\nCode: <currentCode>` so Claude has context about what's already happening
+5. If 3 consecutive restarts fail within 30 seconds, stop retrying and show `Claude disconnected. Press Ctrl+R to retry.`
 
 ### Stream-JSON Protocol
 
@@ -170,9 +201,10 @@ When Claude calls tools (curl to the engine), the TUI renders them as:
 
 ### Error Handling
 
-- If Claude subprocess exits, show error in chat and offer to restart
+- If Claude subprocess exits, auto-restart with backoff (see Auto-Restart above)
 - If engine returns `{ok: false, error: "..."}`, Claude sees it in the curl response and reports to user
 - If Claude is rate-limited or network fails, show status in the status bar
+- If the engine fails to initialize (e.g., sample loading fails), show error in chat and allow retry
 
 ## Keyboard Shortcuts
 
@@ -184,6 +216,7 @@ When Claude calls tools (curl to the engine), the TUI renders them as:
 | Ctrl+C | Quit (graceful shutdown) |
 | Ctrl+L | Clear chat |
 | Ctrl+Space | Toggle play/stop |
+| Ctrl+R | Restart Claude subprocess (if disconnected) |
 
 Shortcuts are global via `useInput` at the App level, except when the input bar has focus for typing (Enter and Up are then input-scoped).
 
@@ -214,6 +247,34 @@ We call `analyser.getByteFrequencyData(buffer)` directly on the AnalyserNode (no
 Second line mirrors the first vertically (block character `i` on line 1 maps to `blocks[7 - i]` on line 2).
 
 ## Engine Changes
+
+### Pattern Label Support
+
+Add an optional `label` field to POST `/play` and `/swap`:
+
+```json
+{"code": "s(\"bd*4\").gain(0.9)", "label": "jazzy smooth house"}
+```
+
+The label is stored alongside `currentCode` in the engine state and returned by `GET /status`. The status bar displays the label when present, falling back to a truncated code string if no label is given. Claude's system prompt instructs it to always send a short descriptive label with each pattern.
+
+### Elapsed Time
+
+The engine tracks `playStartTime` (set on play, cleared on stop). The status export includes it:
+
+```js
+export function status() {
+  return {
+    state,
+    code: currentCode,
+    label: currentLabel,
+    cps: repl?.scheduler?.cps ?? null,
+    playingSince: playStartTime ?? null,
+  };
+}
+```
+
+The `<StatusBar>` computes elapsed time as `Date.now() - playingSince` and formats as `m:ss`.
 
 ### New Export: AnalyserNode Access
 
@@ -273,13 +334,14 @@ engine/
   tui.js            — Entry point: starts engine + TUI + Claude
   tui/
     App.jsx         — Root component
-    Waveform.jsx    — ASCII waveform display
-    StatusBar.jsx   — Playing/stopped, BPM, info
-    ChatPanel.jsx   — Scrollable chat history
-    ChatMessage.jsx — Single message rendering
-    InputBar.jsx    — User text input
-    claude.js       — Claude subprocess management
-    useEngine.js    — React hook for engine state
+    Waveform.jsx    — ASCII waveform display (with idle breathing animation)
+    StatusBar.jsx   — Playing/stopped, elapsed time, BPM, label
+    ChatPanel.jsx   — Scrollable chat history with auto-scroll hold
+    ChatMessage.jsx — Single message rendering (text + code blocks)
+    InputBar.jsx    — User text input with history ring buffer
+    claude.js       — Claude subprocess management (spawn, stream, auto-restart)
+    prompt.js       — System prompt assembly (reads skill reference files)
+    useEngine.js    — React hook for engine state + label + elapsed time
     useWaveform.js  — React hook for AnalyserNode data
 ```
 
@@ -294,10 +356,13 @@ engine/
 
 ## Success Criteria
 
-1. `node engine/tui.js` starts engine, shows TUI, spawns Claude
-2. User types "play techno" → Claude responds in chat → music plays → waveform animates
-3. User types "darker" → Claude swaps pattern → waveform updates → music changes
-4. Escape stops playback, waveform goes flat
+1. `npx tsx engine/tui.js` starts engine, shows welcome message and waveform breathing animation, spawns Claude
+2. User types "play techno" → thinking indicator appears → Claude streams response → music plays → waveform animates → status bar shows label + BPM + elapsed time
+3. User types "darker" → Claude swaps pattern → waveform updates → music changes seamlessly
+4. Escape stops playback, waveform returns to breathing animation, elapsed time resets
 5. Ctrl+C exits cleanly (audio stops, Claude killed, terminal restored)
 6. Claude responses stream token-by-token (not block after completion)
 7. Waveform renders at 15fps without visible lag in chat input
+8. If Claude subprocess crashes, it auto-restarts within 2 seconds and re-injects current state
+9. Chat auto-scrolls but holds position if user scrolled up, with `↓ new` indicator
+10. Tool calls render as friendly status lines, not raw curl commands
