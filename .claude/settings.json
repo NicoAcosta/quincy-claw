@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "strudel": {
+      "command": "npx",
+      "args": ["@williamzujkowski/strudel-mcp-server"]
+    }
+  }
+}
