@@ -98,6 +98,74 @@ s("~ ~ ~ ~ ~ ~ sd:1 ~ ~ ~ ~ ~ ~ ~ ~ sd:1") // sparse snare
 
 Philosophy: The drums LISTEN. They respond to what the bass and chords are doing. Less is more. Brushes, not sticks.
 
+### Trance — The Build
+
+Relentless forward momentum. Offbeat bass drives between kicks, energy builds over 32 bars.
+
+```js
+// Core trance groove (at 140 BPM)
+s("bd*4")                              // 4otf kick, punchy
+s("~ [cp sd:3] ~ [cp sd:3]")          // layered clap+snare on 2 and 4
+s("hh*16").gain("0.4 0.2 0.3 0.2 0.4 0.2 0.3 0.2 0.4 0.2 0.3 0.2 0.4 0.2 0.3 0.2")  // 16th hats with velocity
+note("~ a1 ~ a1 ~ a1 ~ a1").s("sawtooth")  // offbeat bass — between kicks
+```
+
+Philosophy: Relentless forward momentum. Energy builds over 16-32 bars through additive layers and filter sweeps. The offbeat bass creates the characteristic trance drive. The trance gate (`.struct("1 0 1 0 1 0 1 0")`) on pads is signature.
+
+### Dubstep — The Drop
+
+Half-time feel at double BPM. Snare on beat 3 only, sparse kicks, heavy bass.
+
+```js
+// Core dubstep groove (at 140 BPM, feels like 70)
+s("bd ~ ~ ~ ~ bd ~ ~ ~ ~ ~ ~ ~ ~ ~ ~")   // sparse kick, hits 1 and 2.5
+s("~ ~ ~ ~ ~ ~ ~ ~ sd:4 ~ ~ ~ ~ ~ ~ ~")  // snare on beat 3 ONLY
+s("~ ~ hh ~ ~ ~ hh ~ ~ ~ hh ~ ~ ~ ~ ~")  // minimal hats
+```
+
+Philosophy: Contrast between sparse verse and heavy drop. The half-time snare creates weight. Bass design IS the music — wobble, growl, or sub. Space between hits makes each one count.
+
+### UK Garage — The Shuffle
+
+The 2-step kick that skips beats creates the bounce. Shuffled hats with `.late()`, warm bass interlock.
+
+```js
+// Core UK garage groove (at 132 BPM)
+s("bd ~ ~ ~ ~ bd:1 ~ ~ ~ ~ bd ~ bd ~ ~ ~")  // 2-step: skips beat 2
+s("~ ~ ~ ~ cp ~ ~ ~ ~ ~ ~ ~ cp ~ ~ ~")       // clap 2 and 4
+s("hh*8").late(0.015)                           // shuffled hats — the garage feel
+  .gain("0.5 0.3 0.45 0.25 0.5 0.3 0.45 0.25")
+```
+
+Philosophy: The kick-bass interlock creates the "bounce" — what's NOT played matters as much as what is. The shuffle on hats (NOT on everything) is what makes it garage. Ghost snare taps at low velocity add groove without density.
+
+### Synthwave — The Grid
+
+Mechanical precision. Straight 8th or 16th kick, gated snare, robotic.
+
+```js
+// Core synthwave groove (at 108 BPM)
+s("bd*4")                              // straight kick, mechanical
+s("~ sd:3 ~ sd:3").room(0.3).size(0.25).decay(0.08)  // gated snare — 80s signature
+s("hh*8").gain("0.35 0.2 0.35 0.2 0.35 0.2 0.35 0.2") // minimal 8th hats
+```
+
+Philosophy: Rigid, robotic, the grid IS the aesthetic. No swing, no humanization. The snare's gated reverb (short room, fast decay) is the 80s signature. Interest comes from arpeggiated sequences and pad movement, not drum complexity.
+
+### Breakbeat — The Chop
+
+Broken kick pattern, NOT four-on-the-floor. Syncopated with rock energy, dynamic hats.
+
+```js
+// Core breakbeat groove (at 130 BPM)
+s("bd ~ ~ bd:3 ~ bd ~ ~ bd ~ ~ ~ bd:3 ~ bd ~")  // broken pattern, unpredictable
+s("~ ~ ~ ~ sd:4 ~ ~ ~ ~ ~ ~ ~ sd:4 ~ ~ sd:4")   // punchy snare with extra hit
+s("hh*16").gain("0.5 0.2 0.35 0.2 0.5 0.2 0.35 0.2 0.5 0.2 0.35 0.2 0.5 0.2 0.35 0.2")
+  .hpf(5000)
+```
+
+Philosophy: Energy through unpredictability. The broken kick pattern IS the genre — if the kick is four-on-the-floor, it's not breakbeat. Snare needs room and crack. Use `amencutup` samples and `.chop()` for authentic chopped breaks.
+
 ---
 
 ## Swing & Timing
@@ -118,6 +186,9 @@ Swing is the single biggest differentiator between genres. It's the difference b
 | Trap | None | `0` | Grid-locked, clinical |
 | DnB | None | `0` | Tight, urgent |
 | Trance | None | `0` | Forward momentum |
+| Dubstep | None | `0` | Heavy, precise |
+| Synthwave | None | `0` | Mechanical, robotic |
+| Breakbeat | Very light | `0.01` | Slight human feel |
 | Industrial | None | `0` | Brutal precision |
 
 ### Where to Apply Swing

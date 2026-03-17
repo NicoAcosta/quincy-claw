@@ -30,8 +30,11 @@ Scales, chords, progressions, and equipment reference for music production.
 - **Jazz**: Bb, Eb, F, Ab (horn-friendly)
 - **DnB**: Em, Am, Dm (dark minor)
 - **Trap**: Fm, Cm, Bbm (dark, cinematic)
-- **Synthwave**: Am, Em, Cm (80s minor keys)
-- **Trance**: Am, Cm, Dm (euphoric minor keys, some major for uplifting)
+- **Synthwave**: Am, Em, Dm (cinematic minor, 80s power)
+- **Trance**: Am, Cm, Dm (emotional minor), F major (uplifting)
+- **Dubstep**: Fm, Cm, Dm (dark, heavy minor)
+- **UK Garage**: Cm, Gm, Am (soulful minor)
+- **Breakbeat**: Em, Am, Dm (rock-influenced)
 
 ## Chord Construction
 
@@ -88,6 +91,18 @@ Scales, chords, progressions, and equipment reference for music production.
 ### Trance
 - im-bVII-bVI-V (Am G F E) — classic uplifting progression
 - im-iv-bVI-bVII (Am Dm F G)
+
+### Dubstep
+- im-bVI-bVII-iv (Fm Db Eb Bbm) — dark, heavy
+- im-bVI (Fm Db) — simple two-chord oscillation for drops
+
+### UK Garage
+- im7-iv7-bVII7-bIIImaj7 (Cm7 Fm7 Bb7 Ebmaj7) — soulful, warm
+- im7-bVII7-bVImaj7-V7 (Cm7 Bb7 Abmaj7 G7) — classic 2-step progression
+
+### Breakbeat
+- im-bVII-iv (Em D Am) — rock-influenced power
+- im-bVI-bIII-bVII (Em C G D) — driving, anthemic
 
 ---
 

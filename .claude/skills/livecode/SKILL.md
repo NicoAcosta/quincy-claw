@@ -1,6 +1,6 @@
 ---
 name: livecode
-description: "AI-assisted music creation through live coding with Strudel. Use when: (1) user asks to play, create, or generate music, (2) user mentions genres like techno, house, DnB, jazz, ambient, trap, lo-fi, (3) user gives musical feedback like 'darker', 'more energy', 'add bass', (4) user uses producer terms like 'sidechain', '808', 'acid bass', 'Reese', (5) user asks to modify or iterate on a playing pattern, (6) user shares a Strudel code snippet. Generates Strudel code and plays it in the browser via Playwright."
+description: "AI-assisted music creation through live coding with Strudel. Use when: (1) user asks to play, create, or generate music, (2) user mentions genres like techno, house, DnB, jazz, ambient, trap, lo-fi, trance, dubstep, UK garage, synthwave, breakbeat, (3) user gives musical feedback like 'darker', 'more energy', 'add bass', (4) user uses producer terms like 'sidechain', '808', 'acid bass', 'Reese', 'wobble', 'arp', (5) user asks to modify or iterate on a playing pattern, (6) user shares a Strudel code snippet. Generates Strudel code and plays it in the browser via Playwright."
 ---
 
 # LiveCode — AI Music Creation with Strudel
@@ -52,6 +52,11 @@ Genre templates live in `strudel/genres/` — read the relevant template before 
 | Trap | 140 | Fm | strudel/genres/trap.js |
 | Acid | 132 | Am | strudel/genres/acid.js |
 | Dub | 75 | Gm | strudel/genres/dub.js |
+| Trance | 140 | Am | strudel/genres/trance.js |
+| Dubstep | 140 | Fm | strudel/genres/dubstep.js |
+| UK Garage | 132 | Cm | strudel/genres/ukgarage.js |
+| Synthwave | 108 | Am | strudel/genres/synthwave.js |
+| Breakbeat | 130 | Em | strudel/genres/breakbeat.js |
 | Generative | 90 | varies | strudel/genres/generative.js |
 
 ---

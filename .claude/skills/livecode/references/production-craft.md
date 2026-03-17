@@ -9,6 +9,7 @@ How to think like a producer — frequency allocation, gain hierarchy, space, de
 - [Density & Complexity Rules](#density--complexity-rules)
 - [Sound Palette Coherence](#sound-palette-coherence)
 - [Creative Constraints](#creative-constraints)
+- [Common Mistakes](#common-mistakes)
 
 ---
 
@@ -48,6 +49,11 @@ Perc:     .hpf(1000) — metallic upper-register textures
 - **Ambient**: No sub competition. Pads spread wide (200Hz-5kHz). Air and space matter most.
 - **DnB**: Sub bass (40-80Hz) + snare presence (2-5kHz) are the two anchors. Everything else fits around.
 - **Boom bap**: Kick low (60-100Hz), snare mid (200Hz-3kHz), everything filtered `.lpf(3000)` for dusty feel.
+- **Trance**: Kick punchy mid (80-150Hz), offbeat bass (100-500Hz), supersaw pads fill upper mids (1-5kHz). Arps sparkle in highs (3-8kHz).
+- **Dubstep**: Sub bass sine (30-80Hz), wobble saw mid (200-2kHz), kick punchy (80-150Hz). Wobble filter sweep IS the frequency spectrum.
+- **UK Garage**: Kick and bass interlock (60-300Hz), chord stabs mid (300Hz-3kHz), shuffled hats high (5kHz+). Warm, not bright.
+- **Synthwave**: Square bass (60-200Hz), arps mid-high (400Hz-4kHz), saw pads fill (300Hz-2kHz). Everything has a retro roll-off above 8kHz.
+- **Breakbeat**: Kick punchy (60-150Hz), distorted bass mid (200-900Hz), snare cracking (2-5kHz). Raw, mid-heavy energy.
 
 ### Muddiness Prevention Checklist
 
@@ -284,6 +290,7 @@ Breaking two rules at once usually means you've changed genre.
 
 ### Interest Through Contrast
 
+
 The ear notices CHANGE, not state. Use `.every()` to create contrast:
 - Quiet makes loud louder — drop gain before a build
 - Dry makes wet wetter — strip reverb before a wash
@@ -306,3 +313,61 @@ Signs a layer should go:
 - It duplicates the frequency range of another layer
 - It was added "for fullness" rather than for a specific musical reason
 - The track feels cleaner without it
+
+---
+
+## Common Mistakes
+
+Production anti-patterns that make tracks sound amateur. Avoid these.
+
+### 1. Front-loading Energy
+
+Starting at full intensity leaves nowhere to go. First 8 bars should be at 60% density, building to 100%. Use additive arrangement — start with drums + bass, add layers over time.
+
+```js
+// Bad: everything from bar 1
+// Good: layers enter progressively
+s("hh*16").gain(0.4)
+  .every(4, x => x.struct("1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1"))  // hats from bar 1
+  // pad enters at bar 4, lead at bar 8 — use .every() to introduce elements
+```
+
+### 2. Static Effects
+
+Reverb, delay, and filter values should MOVE. Static `.lpf(800)` is a missed opportunity. Dub philosophy: effects are instruments, not settings.
+
+```js
+// Bad: static filter
+note("e1").s("sawtooth").lpf(800)
+
+// Good: filter breathes
+note("e1").s("sawtooth").lpf(sine.rangex(600, 1200).slow(8))
+```
+
+### 3. Energy Plateau
+
+Peak energy for >16 bars = listener fatigue. Pull back for 4-8 bars before pushing again. Create valleys:
+
+```js
+// Periodic energy valley — thin out every 16 bars for 4 bars
+s("hh*16").gain(0.4)
+  .every(16, x => x.degradeBy(0.5))
+```
+
+### 4. Adding to Fix
+
+When something sounds wrong, remove a layer before adding one. The "remove one layer" test: if removing any single layer improves things, the problem is density, not content. More layers ≠ more full.
+
+### 5. Same-Octave Bass and Kick
+
+Both competing in 60-100Hz creates mud. Either pitch bass up (octave 2+) or use sine sub with minimal harmonics below the kick. Only ONE element below 100Hz at a time.
+
+```js
+// Bad: both fighting for sub
+s("bd*4").gain(1.0),
+note("e1").s("sawtooth").gain(0.8)  // full-spectrum saw at sub freq
+
+// Good: bass uses sine for sub, or plays higher
+note("e1").s("sine").lpf(100).gain(0.7),  // clean sub, no harmonics fighting kick
+note("e2").s("sawtooth").lpf(800).gain(0.6)  // OR: mid bass above kick
+```
