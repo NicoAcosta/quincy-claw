@@ -1,0 +1,11 @@
+{
+  "name": "quincy-claw",
+  "description": "AI music production skills for Strudel live coding",
+  "owner": { "name": "NicoAcosta" },
+  "plugins": [{
+    "name": "quincy-claw",
+    "description": "AI music production — /play, /studio, /vibe, /quincy across 15 genres",
+    "version": "1.0.0",
+    "source": "./"
+  }]
+}

@@ -10,6 +10,21 @@ An AI producer built on MCP — like an MPC, but Claudio plays the pads.
 
 Named after Quincy Jones, because every great session needs a producer who listens.
 
+## Install
+
+### Any AI coding tool (via skills.sh)
+```bash
+npx skills add NicoAcosta/quincy-claw
+```
+
+### Claude Code plugin
+```bash
+claude plugin install NicoAcosta/quincy-claw
+```
+
+### Codex / OpenCode / Cursor
+See platform-specific instructions in `.codex/`, `.opencode/`, `.cursor-plugin/`.
+
 ## How It Works
 
 ```
@@ -50,8 +65,8 @@ You describe music  →  Claude generates Strudel code  →  Plays in your brows
 Requires [Claude Code](https://claude.ai/claude-code) and a Chromium browser for playback.
 
 ```bash
-git clone <this-repo>
-cd livecode
+git clone https://github.com/NicoAcosta/quincy-claw.git
+cd quincy-claw
 npm install
 npx playwright install chromium
 ```
@@ -78,23 +93,23 @@ Templates live in `strudel/genres/` and serve as starting points — Claude read
 ## Project Structure
 
 ```
+skills/
+  quincy/        Router skill — picks the right mode
+  play/          One-shot generation skill + shared references
+    references/  Strudel API, production craft, genres, theory, etc.
+  studio/        Expert guided session skill (6 stages)
+  vibe/          Feel-based guided session skill (4 stages)
 strudel/
-  genres/          15 genre templates (playable Strudel code)
-  theory/          Music theory reference (scales, chords, drums, bass)
-  songs/           Saved sessions and compositions
-.claude/
-  skills/
-    quincy/        Router skill — picks the right mode
-    play/          One-shot generation skill + shared references
-      references/  Strudel API, production craft, genres, theory, etc.
-    studio/        Expert guided session skill (6 stages)
-    vibe/          Feel-based guided session skill (4 stages)
-CLAUDE.md          Project config — playback mechanics, skill routing
+  genres/        15 genre templates (playable Strudel code)
+  theory/        Music theory reference (scales, chords, drums, bass)
+  songs/         Saved sessions and compositions
+CLAUDE.md        Project config — playback mechanics, skill routing
+AGENTS.md        Cross-platform instruction file
 ```
 
 ### Reference Library
 
-The skills share a set of reference documents (in `.claude/skills/play/references/`):
+The skills share a set of reference documents (in `skills/play/references/`):
 
 - **strudel-api.md** — Full Strudel syntax, effects, synthesis, samples, mini-notation
 - **production-craft.md** — Frequency allocation, gain hierarchy, density, palette coherence
@@ -123,4 +138,4 @@ No server, no build step, no API keys. Just Claude, a browser, and a pattern lan
 
 ## License
 
-ISC
+MIT

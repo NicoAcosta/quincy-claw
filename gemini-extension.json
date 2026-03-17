@@ -1,0 +1,6 @@
+{
+  "name": "quincy-claw",
+  "description": "AI music production skills for Strudel live coding",
+  "version": "1.0.0",
+  "contextFileName": "GEMINI.md"
+}

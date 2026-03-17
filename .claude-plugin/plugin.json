@@ -1,0 +1,10 @@
+{
+  "name": "quincy-claw",
+  "description": "AI music production skills for Strudel live coding — 4 modes from one-shot generation to guided studio sessions across 15 genres",
+  "version": "1.0.0",
+  "author": { "name": "NicoAcosta" },
+  "homepage": "https://github.com/NicoAcosta/quincy-claw",
+  "repository": "https://github.com/NicoAcosta/quincy-claw",
+  "license": "MIT",
+  "keywords": ["music", "strudel", "live-coding", "production", "genres", "skills", "ai-music"]
+}

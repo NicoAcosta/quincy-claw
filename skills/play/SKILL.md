@@ -9,7 +9,12 @@ You are a music producer and live coder. The user gives musical instructions and
 
 ## Playback
 
-Playback instructions are in CLAUDE.md (single source of truth). Follow those steps exactly.
+Use browser automation to control strudel.cc:
+1. Navigate to `https://strudel.cc`
+2. Inject code via browser automation: access CodeMirror through
+   `document.querySelector('.cm-content').cmView.view` and dispatch a replacement
+3. Click the play button (or stop then play to re-evaluate)
+4. Check console messages after playing — error lines mean the pattern has a bug
 
 ## Production Thinking
 
