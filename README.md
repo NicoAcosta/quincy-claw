@@ -1,50 +1,120 @@
-# LiveCode
+# Quincy Claw
 
-AI-assisted music creation through live coding. Describe the music you want — from "chill lo-fi beat" to "128 BPM Eb minor acid techno with TB-303 bass" — and Claude generates [Strudel](https://strudel.cc) code that plays in your browser in real-time.
+AI-assisted music creation through live coding. Describe the music you want — from "rainy Sunday morning" to "128 BPM Eb minor acid techno with TB-303 bass" — and Claude generates [Strudel](https://strudel.cc) code that plays in your browser in real-time.
+
+Named after Quincy Jones, because every great session needs a producer who listens.
 
 ## How It Works
 
-1. Tell Claude what you want to hear
-2. Claude generates Strudel live coding patterns using genre templates + music theory
-3. Code is sent to strudel.cc via Playwright browser automation
-4. Listen, give feedback ("darker", "more swing", "add a melody"), iterate
+```
+You describe music  →  Claude generates Strudel code  →  Plays in your browser  →  You give feedback  →  Repeat
+```
 
-## Genres
+1. Open this project in [Claude Code](https://claude.ai/claude-code)
+2. Ask for music in whatever way feels natural
+3. Claude picks the right mode, generates code, and sends it to [strudel.cc](https://strudel.cc) via Playwright
+4. Listen, react, iterate — "darker", "more swing", "add a melody", "needs more weight"
 
-Techno, House, Ambient, Drum & Bass, Lo-fi Hip Hop, Jazz, Trap, Acid, Dub, Generative/Experimental — each with a ready-to-play template in `strudel/genres/`.
+## Four Ways to Make Music
+
+| Command | Mode | For |
+|---------|------|-----|
+| `/play` | One-shot | "Play dark minimal techno" — fast, direct |
+| `/studio` | Expert guided | Build layer-by-layer: drums → bass → harmony → melody → mix → arrange |
+| `/vibe` | Feel-based guided | "Rainy afternoon" — describe feelings, not frequencies |
+| `/quincy` | Router | Not sure which? This recommends the right one |
+
+**`/play`** is the default — just ask for music and it plays. Use `/studio` when you want technical control over each layer. Use `/vibe` when you'd rather describe a mood than a mix.
+
+## Examples
+
+```
+> play some techno
+> /vibe driving at night, windows down
+> /studio                            (starts guided session)
+> chill lo-fi beat, 80 BPM, Db major
+> dark ambient soundscape with evolving textures
+> make the bass heavier
+> add a melody over this
+> more swing, less busy
+```
 
 ## Setup
 
+Requires [Claude Code](https://claude.ai/claude-code) and a Chromium browser for playback.
+
 ```bash
+git clone <this-repo>
+cd livecode
 npm install
 npx playwright install chromium
 ```
 
-## Usage
+Then open the project in Claude Code and start asking for music.
 
-Open this project in [Claude Code](https://claude.ai/claude-code) and ask for music:
+## Genres
 
-```
-> play some techno
-> chill lo-fi beat, 80 BPM, Db major
-> dark ambient soundscape with evolving textures
-> make the bass heavier
-> add a melody
-```
+15 genre templates, each a playable Strudel snippet with genre-appropriate defaults:
+
+| Genre | BPM | Key | Genre | BPM | Key |
+|-------|-----|-----|-------|-----|-----|
+| Techno | 130 | Cm | Trance | 140 | Am |
+| House | 124 | Am | Dubstep | 140 | Fm |
+| Ambient | 70 | D | UK Garage | 132 | Cm |
+| Drum & Bass | 174 | Em | Synthwave | 108 | Am |
+| Lo-fi | 82 | Eb | Breakbeat | 130 | Em |
+| Jazz | 120 | Bb | Acid | 132 | Am |
+| Trap | 140 | Fm | Dub | 75 | Gm |
+| Generative | 90 | varies | | | |
+
+Templates live in `strudel/genres/` and serve as starting points — Claude reads them, then customizes based on your request.
 
 ## Project Structure
 
 ```
 strudel/
-  genres/     10 genre templates (playable Strudel snippets)
-  theory/     Music theory reference (scales, chords, drums, bass)
-  songs/      Saved sessions
-docs/         Detailed reference docs
-skills/       Claude Code skill definition
+  genres/          15 genre templates (playable Strudel code)
+  theory/          Music theory reference (scales, chords, drums, bass)
+  songs/           Saved sessions and compositions
+.claude/
+  skills/
+    quincy/        Router skill — picks the right mode
+    play/          One-shot generation skill + shared references
+      references/  Strudel API, production craft, genres, theory, etc.
+    studio/        Expert guided session skill (6 stages)
+    vibe/          Feel-based guided session skill (4 stages)
+CLAUDE.md          Project config — playback mechanics, skill routing
 ```
 
-## Tech
+### Reference Library
 
-- [Strudel](https://strudel.cc) — Browser-based live coding environment
-- [Playwright](https://playwright.dev) — Browser automation for playback control
-- [Claude Code](https://claude.ai/claude-code) — AI coding assistant
+The skills share a set of reference documents (in `.claude/skills/play/references/`):
+
+- **strudel-api.md** — Full Strudel syntax, effects, synthesis, samples, mini-notation
+- **production-craft.md** — Frequency allocation, gain hierarchy, density, palette coherence
+- **groove-and-rhythm.md** — Beat anatomy, swing values, ghost notes, micro-arrangement
+- **sound-design.md** — Producer vocab translations, synthesis recipes, bass design
+- **genres.md** — Sub-styles, BPM ranges, sonic palettes, genre identity rules
+- **arrangement.md** — Energy curves, evolution toolkit, transitions, build/drop patterns
+- **music-theory.md** — Scales, chords, progressions, tension/release, voicings
+
+## Tech Stack
+
+- **[Strudel](https://strudel.cc)** — Browser-based live coding environment for music
+- **[Playwright](https://playwright.dev)** — Browser automation for injecting code and controlling playback
+- **[Claude Code](https://claude.ai/claude-code)** — AI coding assistant that generates and iterates on patterns
+
+## How It Actually Works (Under the Hood)
+
+1. Claude reads the relevant genre template from `strudel/genres/`
+2. Considers frequency spectrum, groove, space, and sound palette
+3. Generates a `stack()` of Strudel pattern layers
+4. Opens strudel.cc in Playwright, injects the code into CodeMirror
+5. Clicks play, checks console for errors
+6. Waits for your feedback, modifies specific layers, replays
+
+No server, no build step, no API keys. Just Claude, a browser, and a pattern language.
+
+## License
+
+ISC
