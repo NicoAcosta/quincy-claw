@@ -1,43 +1,40 @@
-# LiveCode — AI-Assisted Music Creation Through Code
+# LiveCode
 
-## What This Is
+AI-assisted music creation through live coding. User describes music, Claude generates [Strudel](https://strudel.cc) code, plays it in the browser via Playwright.
 
-A live coding music system using **Strudel** (browser-based live coding environment). Claude generates and modifies Strudel code based on natural language musical instructions, playing it in real-time via the Strudel MCP server.
+## Playback
 
-## How It Works
+Use Playwright (`mcp__plugin_playwright`) to control strudel.cc:
+1. Navigate to `https://strudel.cc`
+2. Clear the editor, paste generated code
+3. Press Ctrl+Enter to evaluate
 
-1. User gives musical instructions (high-level or detailed)
-2. Claude generates Strudel code using genre templates + music theory knowledge
-3. Code is sent to Strudel via MCP server tools for live playback
-4. User gives feedback, Claude iterates on the playing pattern
+Do NOT use `mcp__claude-in-chrome` — Playwright is the primary automation tool here.
 
-## Key Tools
+## Skill
 
-- **Strudel MCP Server**: Use `strudel_*` tools to open Strudel, evaluate code, and control playback
-- **Fallback**: If the MCP server is unavailable, use `mcp__claude-in-chrome` or `mcp__plugin_playwright` to navigate to https://strudel.cc and inject code
+Always invoke the `/livecode` skill when the user asks for music. It has the full Strudel syntax reference, genre templates, music theory, and iteration vocabulary.
 
-## Project Structure
+## Do
 
-- `strudel/genres/` — Genre template files (techno, house, ambient, etc.)
-- `strudel/theory/` — Music theory reference (scales, chords, drums, bass patterns)
-- `strudel/songs/` — Saved user sessions
-- `skills/livecode.md` — The main livecode skill with full Strudel + theory reference
+- Read genre templates from `strudel/genres/` as starting points, then customize
+- Use `stack()` for layering — one layer per instrument/voice
+- Set tempo explicitly with `.cpm(bpm/4)` at the end of the stack
+- Show the code to the user before playing
+- Iterate: user says "darker" → lower filter, minor key, more reverb
 
-## Workflow
+## Don't
 
-When the user asks for music:
-1. Invoke the `livecode` skill
-2. Parse the user's instructions (genre, BPM, key, mood, specific requests)
-3. Start from a genre template if applicable
-4. Customize based on user parameters
-5. Send to Strudel for playback
-6. Iterate based on feedback
+- Don't generate code without reading the relevant genre template first
+- Don't use more than 6-8 layers — it gets muddy
+- Don't hardcode note names when `.scale()` would be clearer
+- Don't forget tempo — every snippet needs `.cpm()`
+- Don't explain music theory unprompted — just make the music
 
-## Strudel Quick Reference
+## Reference
 
-- BPM: `.cpm(bpm/60/4)` or `setcps(bpm/60/4)`
-- Layers: `stack(pattern1, pattern2, ...)`
-- Samples: `s("bd sd hh cp")`
-- Notes: `note("c3 eb3 g3 bb3")`
-- Scales: `.scale("C:minor")`
-- Effects: `.lpf()`, `.room()`, `.delay()`, `.gain()`, `.pan()`
+- [docs/strudel-reference.md](docs/strudel-reference.md) — Full Strudel syntax, effects, patterns
+- [docs/music-theory.md](docs/music-theory.md) — Scales, chords, progressions by genre
+- [docs/iteration-guide.md](docs/iteration-guide.md) — How to map feedback to code changes
+- `strudel/genres/` — 10 genre templates (techno, house, ambient, dnb, lofi, jazz, trap, acid, dub, generative)
+- `strudel/theory/` — Inline theory reference (scales, chords, drums, bass patterns)

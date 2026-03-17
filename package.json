@@ -8,8 +8,5 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
-  "dependencies": {
-    "@williamzujkowski/strudel-mcp-server": "^2.4.1"
-  }
+  "description": ""
 }
