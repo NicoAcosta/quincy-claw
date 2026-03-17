@@ -44,16 +44,16 @@ function readBody(req, maxBytes = 1_048_576) {
 
 const routes = {
   'POST /play': async (req, res) => {
-    const { code } = await readBody(req);
+    const { code, label } = await readBody(req);
     if (!code) return json(res, 400, { error: 'Missing "code" field' });
-    const result = await play(code);
+    const result = await play(code, label);
     json(res, result.ok ? 200 : 400, result);
   },
 
   'POST /swap': async (req, res) => {
-    const { code } = await readBody(req);
+    const { code, label } = await readBody(req);
     if (!code) return json(res, 400, { error: 'Missing "code" field' });
-    const result = await swap(code);
+    const result = await swap(code, label);
     json(res, result.ok ? 200 : 400, result);
   },
 

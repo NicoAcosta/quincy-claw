@@ -19,6 +19,8 @@ import { webaudioRepl } from '@strudel/webaudio';
 
 let repl = null;
 let currentCode = null;
+let currentLabel = null;
+let playStartTime = null;
 let state = 'stopped'; // 'stopped' | 'playing' | 'loading'
 let initPromise = null;
 
@@ -65,7 +67,7 @@ export async function init() {
 /**
  * Evaluate Strudel code and start playback.
  */
-export async function play(code) {
+export async function play(code, label) {
   await init();
 
   await repl.evaluate(code);
@@ -74,6 +76,8 @@ export async function play(code) {
     return { ok: false, error: repl.state.evalError.message };
   }
   currentCode = code;
+  currentLabel = label || null;
+  playStartTime = Date.now();
   state = 'playing';
   return { ok: true, state };
 }
@@ -82,9 +86,9 @@ export async function play(code) {
  * Hot-swap to new code without stopping the scheduler.
  * The Cyclist scheduler continues running — we just replace the pattern.
  */
-export async function swap(code) {
+export async function swap(code, label) {
   if (state !== 'playing') {
-    return play(code);
+    return play(code, label);
   }
 
   await init();
@@ -94,6 +98,7 @@ export async function swap(code) {
     return { ok: false, error: repl.state.evalError.message };
   }
   currentCode = code;
+  currentLabel = label || null;
   return { ok: true, state };
 }
 
@@ -106,6 +111,7 @@ export function stop() {
     panic(); // mute any lingering audio
   }
   state = 'stopped';
+  playStartTime = null;
   return { ok: true, state };
 }
 
@@ -116,6 +122,11 @@ export function status() {
   return {
     state,
     code: currentCode,
+    label: currentLabel,
     cps: repl?.scheduler?.cps ?? null,
+    playingSince: playStartTime ?? null,
   };
 }
+
+import { masterAnalyser } from './polyfills.js';
+export function getAnalyser() { return masterAnalyser; }
