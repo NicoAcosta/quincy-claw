@@ -94,6 +94,17 @@ export function App({ port }) {
       setMessages(prev => [...prev, { role: 'system', text: 'Claude reconnected.' }]);
       return;
     }
+
+    // Ctrl+Space → toggle play/stop
+    if (input === ' ' && key.ctrl) {
+      const { state, code } = engineStatus();
+      if (state === 'playing') {
+        stop();
+      } else if (code) {
+        play(code);
+      }
+      return;
+    }
   });
 
   return (
@@ -106,10 +117,7 @@ export function App({ port }) {
         streamingTool={streamingTool}
         thinking={thinking}
       />
-      <InputBar
-        onSubmit={handleSubmit}
-        disabled={thinking || claudeRef.current?.isActive?.()}
-      />
+      <InputBar onSubmit={handleSubmit} />
     </Box>
   );
 }

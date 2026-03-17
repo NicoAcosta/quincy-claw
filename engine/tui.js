@@ -4,6 +4,16 @@
  * Starts the engine, HTTP server, and Ink React TUI in a single process.
  * Usage: npx tsx engine/tui.js
  */
+
+// Suppress console output during engine initialization so it doesn't
+// break the TUI display. Redirect to stderr for debugging if needed.
+const origLog = console.log;
+const origErr = console.error;
+const origWarn = console.warn;
+console.log = (...args) => process.stderr.write(args.join(' ') + '\n');
+console.error = (...args) => process.stderr.write(args.join(' ') + '\n');
+console.warn = (...args) => process.stderr.write(args.join(' ') + '\n');
+
 import './polyfills.js';
 import React from 'react';
 import { render } from 'ink';
