@@ -1,6 +1,4 @@
-<div align="center">
-  <img src="./assets/banner.png" alt="Quincy Claw" width="100%" />
-</div>
+
 
 # Quincy Claw
 
@@ -12,18 +10,23 @@ Named after Quincy Jones, because every great session needs a producer who liste
 
 ## Install
 
-### Any AI coding tool (via skills.sh)
+### Claude Code
+
 ```bash
-npx skills add NicoAcosta/quincy-claw
+# Add as a marketplace, then install
+/plugin marketplace add NicoAcosta/quincy-claw
+/plugin install quincy-claw@nicoacosta-quincy-claw
 ```
 
-### Claude Code plugin
+Or clone and use directly:
+
 ```bash
-claude plugin install NicoAcosta/quincy-claw
+claude --plugin-dir /path/to/quincy-claw
 ```
 
-### Codex / OpenCode / Cursor
-See platform-specific instructions in `.codex/`, `.opencode/`, `.cursor-plugin/`.
+### Codex / OpenCode / Cursor / Gemini
+
+See platform-specific instructions in `.codex/`, `.opencode/`, `.cursor-plugin/`, or `GEMINI.md`.
 
 ## How It Works
 
@@ -38,14 +41,16 @@ You describe music  →  Claude generates Strudel code  →  Plays in your brows
 
 ## Four Ways to Make Music
 
-| Command | Mode | For |
-|---------|------|-----|
-| `/play` | One-shot | "Play dark minimal techno" — fast, direct |
-| `/studio` | Expert guided | Build layer-by-layer: drums → bass → harmony → melody → mix → arrange |
-| `/vibe` | Feel-based guided | "Rainy afternoon" — describe feelings, not frequencies |
-| `/quincy` | Router | Not sure which? This recommends the right one |
 
-**`/play`** is the default — just ask for music and it plays. Use `/studio` when you want technical control over each layer. Use `/vibe` when you'd rather describe a mood than a mix.
+| Command   | Mode              | For                                                                   |
+| --------- | ----------------- | --------------------------------------------------------------------- |
+| `/play`   | One-shot          | "Play dark minimal techno" — fast, direct                             |
+| `/studio` | Expert guided     | Build layer-by-layer: drums → bass → harmony → melody → mix → arrange |
+| `/vibe`   | Feel-based guided | "Rainy afternoon" — describe feelings, not frequencies                |
+| `/quincy` | Router            | Not sure which? This recommends the right one                         |
+
+
+`**/play**` is the default — just ask for music and it plays. Use `/studio` when you want technical control over each layer. Use `/vibe` when you'd rather describe a mood than a mix.
 
 ## Examples
 
@@ -77,16 +82,18 @@ Then open the project in Claude Code and start asking for music.
 
 15 genre templates, each a playable Strudel snippet with genre-appropriate defaults:
 
-| Genre | BPM | Key | Genre | BPM | Key |
-|-------|-----|-----|-------|-----|-----|
-| Techno | 130 | Cm | Trance | 140 | Am |
-| House | 124 | Am | Dubstep | 140 | Fm |
-| Ambient | 70 | D | UK Garage | 132 | Cm |
-| Drum & Bass | 174 | Em | Synthwave | 108 | Am |
-| Lo-fi | 82 | Eb | Breakbeat | 130 | Em |
-| Jazz | 120 | Bb | Acid | 132 | Am |
-| Trap | 140 | Fm | Dub | 75 | Gm |
-| Generative | 90 | varies | | | |
+
+| Genre       | BPM | Key    | Genre     | BPM | Key |
+| ----------- | --- | ------ | --------- | --- | --- |
+| Techno      | 130 | Cm     | Trance    | 140 | Am  |
+| House       | 124 | Am     | Dubstep   | 140 | Fm  |
+| Ambient     | 70  | D      | UK Garage | 132 | Cm  |
+| Drum & Bass | 174 | Em     | Synthwave | 108 | Am  |
+| Lo-fi       | 82  | Eb     | Breakbeat | 130 | Em  |
+| Jazz        | 120 | Bb     | Acid      | 132 | Am  |
+| Trap        | 140 | Fm     | Dub       | 75  | Gm  |
+| Generative  | 90  | varies |           |     |     |
+
 
 Templates live in `strudel/genres/` and serve as starting points — Claude reads them, then customizes based on your request.
 
