@@ -13,6 +13,10 @@ const projectRoot = path.resolve(__dirname, '../..');
  * Each user message spawns a new Claude process. Conversation continuity
  * is maintained via --resume <session_id>. Streaming responses arrive as
  * stream_event JSON lines with content_block_delta for text tokens.
+ *
+ * Raw text is piped to stdin (not stream-json input format). This works
+ * because each turn is a fresh process — stdin is the initial prompt,
+ * and --resume provides conversation history from prior turns.
  */
 export function createClaude(onMessage, onError) {
   let sessionId = null;
@@ -20,19 +24,37 @@ export function createClaude(onMessage, onError) {
   let consecutiveFailures = 0;
   let lastFailTime = 0;
   let killed = false;
+  let cachedStaticPrompt = null;
+  let promptWarnings = [];
+
+  function getSystemPrompt(engineState) {
+    if (!cachedStaticPrompt) {
+      const { prompt, warnings } = buildSystemPrompt();
+      cachedStaticPrompt = prompt;
+      promptWarnings = warnings;
+    }
+    // Append dynamic engine state
+    if (engineState?.code) {
+      return cachedStaticPrompt +
+        `\n\n---\n\nCurrently playing: ${engineState.label || 'unknown'}\nCode:\n\`\`\`js\n${engineState.code}\n\`\`\``;
+    }
+    return cachedStaticPrompt;
+  }
+
+  function getWarnings() { return promptWarnings; }
 
   function send(text) {
     if (killed) return;
 
     const engineState = status();
-    const systemPrompt = buildSystemPrompt(engineState);
+    const systemPrompt = getSystemPrompt(engineState);
 
     const args = [
       '--print',
       '--output-format', 'stream-json',
       '--verbose',
       '--include-partial-messages',
-      '--dangerously-skip-permissions',
+      '--allowedTools', 'Bash(curl:*)',
       '--max-turns', '3',
       '--append-system-prompt', systemPrompt,
     ];
@@ -93,20 +115,11 @@ export function createClaude(onMessage, onError) {
               }
             }
 
-            if (evt.type === 'content_block_stop') {
-              // Don't emit anything — we handle done at message_stop
-            }
-
-            if (evt.type === 'message_stop') {
-              // Turn complete
-            }
-
             continue;
           }
 
           // Full assistant message (arrives after streaming)
           if (msg.type === 'assistant') {
-            // Update session_id from assistant message
             if (msg.session_id) sessionId = msg.session_id;
             continue;
           }
@@ -146,7 +159,12 @@ export function createClaude(onMessage, onError) {
           return;
         }
 
-        onError?.(`Claude exited with code ${code}. Will retry on next message.`);
+        // Auto-restart: show reconnecting and retry after 2s backoff
+        onMessage({ type: 'text', content: '' });
+        onError?.('Reconnecting...');
+        setTimeout(() => {
+          if (!killed) send(text);
+        }, 2000);
       }
     });
 
@@ -171,12 +189,11 @@ export function createClaude(onMessage, onError) {
   function restart() {
     killed = false;
     consecutiveFailures = 0;
-    // Session ID is preserved so conversation continues
   }
 
   function isActive() {
     return activeProcess !== null;
   }
 
-  return { send, kill, restart, isActive };
+  return { send, kill, restart, isActive, getWarnings };
 }

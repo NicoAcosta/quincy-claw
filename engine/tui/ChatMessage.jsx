@@ -7,7 +7,7 @@ export function ChatMessage({ role, text, streaming }) {
 
   // Detect and style code blocks
   const parts = [];
-  const lines = text.split('\n');
+  const lines = (text || '').split('\n');
   let inCode = false;
 
   for (let i = 0; i < lines.length; i++) {

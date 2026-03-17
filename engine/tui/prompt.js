@@ -5,7 +5,14 @@ import { fileURLToPath } from 'node:url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const projectRoot = path.resolve(__dirname, '../..');
 
-export function buildSystemPrompt(engineState = null) {
+/**
+ * Build the static system prompt from skill reference files.
+ * Called once at startup and cached by claude.js.
+ * Returns { prompt, warnings } where warnings lists any issues found.
+ */
+export function buildSystemPrompt() {
+  const warnings = [];
+
   const header = `You are a music producer. The user describes music, you generate Strudel code and play it.
 
 To play: curl -s -X POST http://localhost:3456/play -H 'Content-Type: application/json' -d '{"code": "<strudel code>", "label": "short description"}'
@@ -22,12 +29,15 @@ IMPORTANT:
   const refDir = path.join(projectRoot, 'skills/play/references');
   let refs = '';
   try {
-    refs = fs.readdirSync(refDir)
-      .filter(f => f.endsWith('.md'))
+    const files = fs.readdirSync(refDir).filter(f => f.endsWith('.md'));
+    if (files.length === 0) {
+      warnings.push('No reference files found in skills/play/references/');
+    }
+    refs = files
       .map(f => fs.readFileSync(path.join(refDir, f), 'utf8'))
       .join('\n\n---\n\n');
   } catch (err) {
-    console.error('[prompt] Could not read reference files:', err.message);
+    warnings.push(`Could not read reference files: ${err.message}`);
   }
 
   // Read genre template code
@@ -43,16 +53,12 @@ IMPORTANT:
       })
       .join('\n\n');
   } catch (err) {
-    console.error('[prompt] Could not read genre files:', err.message);
+    warnings.push(`Could not read genre files: ${err.message}`);
   }
 
   let prompt = header;
   if (refs) prompt += '\n\n---\n\n' + refs;
   if (genres) prompt += '\n\n---\n\n## Genre Templates\n\n' + genres;
 
-  if (engineState?.code) {
-    prompt += `\n\n---\n\nCurrently playing: ${engineState.label || 'unknown'}\nCode:\n\`\`\`js\n${engineState.code}\n\`\`\``;
-  }
-
-  return prompt;
+  return { prompt, warnings };
 }

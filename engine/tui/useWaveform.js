@@ -1,7 +1,16 @@
 import { useState, useEffect, useRef } from 'react';
 import { getAnalyser } from '../core.js';
 
-const BLOCKS = ' ▁▂▃▄▅▆▇█';
+// 8 block characters (indices 0-7), no leading space
+const BLOCKS = '▁▂▃▄▅▆▇█';
+
+function breathingLine(width) {
+  const t = Date.now() / 1000;
+  return Array.from({ length: width }, (_, i) => {
+    const v = 0.1 + 0.08 * Math.sin(t * 0.8 + i * 0.15);
+    return BLOCKS[Math.round(v * 7)];
+  }).join('');
+}
 
 export function useWaveform(width, fps = 15) {
   const [line, setLine] = useState('');
@@ -11,13 +20,7 @@ export function useWaveform(width, fps = 15) {
     const interval = setInterval(() => {
       const analyser = getAnalyser();
       if (!analyser || analyser.frequencyBinCount === 0) {
-        // Idle breathing animation
-        const t = Date.now() / 1000;
-        const chars = Array.from({ length: width }, (_, i) => {
-          const v = 0.15 + 0.1 * Math.sin(t * 0.8 + i * 0.15);
-          return BLOCKS[Math.round(v * 8)];
-        });
-        setLine(chars.join(''));
+        setLine(breathingLine(width));
         return;
       }
       if (!bufRef.current || bufRef.current.length !== analyser.frequencyBinCount) {
@@ -33,13 +36,7 @@ export function useWaveform(width, fps = 15) {
       }
 
       if (!hasSignal) {
-        // Idle breathing when no audio
-        const t = Date.now() / 1000;
-        const chars = Array.from({ length: width }, (_, i) => {
-          const v = 0.15 + 0.1 * Math.sin(t * 0.8 + i * 0.15);
-          return BLOCKS[Math.round(v * 8)];
-        });
-        setLine(chars.join(''));
+        setLine(breathingLine(width));
         return;
       }
 
@@ -50,7 +47,7 @@ export function useWaveform(width, fps = 15) {
         let sum = 0;
         for (let j = start; j < end; j++) sum += buf[j];
         const avg = sum / (end - start) / 255;
-        return BLOCKS[Math.round(avg * 8)];
+        return BLOCKS[Math.round(avg * 7)];
       });
       setLine(chars.join(''));
     }, Math.round(1000 / fps));

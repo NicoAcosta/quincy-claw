@@ -6,6 +6,7 @@ import { ChatPanel } from './ChatPanel.jsx';
 import { InputBar } from './InputBar.jsx';
 import { createClaude } from './claude.js';
 import { stop, play, status as engineStatus } from '../core.js';
+import { setClaudeInstance } from '../tui.js';
 
 export function App({ port }) {
   const { exit } = useApp();
@@ -61,6 +62,14 @@ export function App({ port }) {
       }
     );
     claudeRef.current = claude;
+    setClaudeInstance(claude);
+
+    // Surface prompt warnings
+    const warnings = claude.getWarnings();
+    if (warnings.length > 0) {
+      setMessages(prev => [...prev, { role: 'system', text: `Warning: ${warnings.join('; ')}` }]);
+    }
+
     return () => claude.kill();
   }, []);
 
@@ -78,8 +87,12 @@ export function App({ port }) {
       return;
     }
 
-    // Ctrl+L → clear chat
+    // Ctrl+L → clear chat and kill any active Claude response
     if (input === 'l' && key.ctrl) {
+      if (claudeRef.current?.isActive()) {
+        claudeRef.current.kill();
+        claudeRef.current.restart();
+      }
       setMessages([{ role: 'system', text: 'Chat cleared.' }]);
       setStreamingText(null);
       setStreamingTool(null);

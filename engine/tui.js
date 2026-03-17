@@ -7,9 +7,6 @@
 
 // Suppress console output during engine initialization so it doesn't
 // break the TUI display. Redirect to stderr for debugging if needed.
-const origLog = console.log;
-const origErr = console.error;
-const origWarn = console.warn;
 console.log = (...args) => process.stderr.write(args.join(' ') + '\n');
 console.error = (...args) => process.stderr.write(args.join(' ') + '\n');
 console.warn = (...args) => process.stderr.write(args.join(' ') + '\n');
@@ -21,7 +18,12 @@ import { App } from './tui/App.jsx';
 import { startServer, stopServer } from './server.js';
 import { stop } from './core.js';
 
+// Track Claude instance for cleanup on exit
+let claudeInstance = null;
+export function setClaudeInstance(instance) { claudeInstance = instance; }
+
 const shutdown = async () => {
+  claudeInstance?.kill();
   stop();
   await stopServer();
   process.exit(0);
