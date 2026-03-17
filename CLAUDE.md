@@ -33,11 +33,9 @@ Always invoke the `/livecode` skill when the user asks for music. It has the ful
 - Don't explain music theory unprompted — just make the music
 - Don't use `.voicings("lefthand")` with chord symbols — it crashes silently. Spell out chord notes manually: `note("<[d3,f3,a3,c4] [g3,bb3,d4,f4]>")`
 - Don't use `.vowel()` with mini-notation patterns like `"<a e i o u>"` — causes `getTrigger` errors. Use a single static vowel only: `.vowel("a")`
+- Don't use `s("shaker")` — not in default sample bank. For 16th-note shimmer, use `s("hh*16").hpf(8000)` with low gain
 
 ## Reference
 
-- [docs/strudel-reference.md](docs/strudel-reference.md) — Full Strudel syntax, effects, patterns
-- [docs/music-theory.md](docs/music-theory.md) — Scales, chords, progressions by genre
-- [docs/iteration-guide.md](docs/iteration-guide.md) — How to map feedback to code changes
 - `strudel/genres/` — 10 genre templates (techno, house, ambient, dnb, lofi, jazz, trap, acid, dub, generative)
 - `strudel/theory/` — Inline theory reference (scales, chords, drums, bass patterns)

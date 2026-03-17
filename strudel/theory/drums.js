@@ -49,6 +49,6 @@
 // Hi-hats: hh (closed), oh (open)
 // Toms: lt (low), mt (mid), ht (high)
 // Cymbals: ride, crash
-// Percussion: shaker, tambourine, cowbell (cb), conga, bongo
+// Percussion: tambourine, cowbell (cb), conga, bongo (no "shaker" — use hh*16 + .hpf(8000))
 // Electronic: 808bd, 808sd, 808:oh
 // Metal: metal, chin
