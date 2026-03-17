@@ -1,3 +1,7 @@
+<div align="center">
+  <img src="./assets/banner.png" alt="Quincy Claw" width="100%" />
+</div>
+
 # Quincy Claw
 
 AI-assisted music creation through live coding. Describe the music you want — from "rainy Sunday morning" to "128 BPM Eb minor acid techno with TB-303 bass" — and Claude generates [Strudel](https://strudel.cc) code that plays in your browser in real-time.
