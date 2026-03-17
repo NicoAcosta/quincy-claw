@@ -1,0 +1,25 @@
+/**
+ * LiveCode TUI — Entry Point
+ *
+ * Starts the engine, HTTP server, and Ink React TUI in a single process.
+ * Usage: npx tsx engine/tui.js
+ */
+import './polyfills.js';
+import React from 'react';
+import { render } from 'ink';
+import { App } from './tui/App.jsx';
+import { startServer, stopServer } from './server.js';
+import { stop } from './core.js';
+
+const shutdown = async () => {
+  stop();
+  await stopServer();
+  process.exit(0);
+};
+process.on('SIGINT', shutdown);
+process.on('SIGTERM', shutdown);
+
+const { port, initPromise } = await startServer();
+await initPromise;
+
+render(React.createElement(App, { port }));

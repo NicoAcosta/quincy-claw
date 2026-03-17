@@ -12,7 +12,8 @@
   ],
   "license": "MIT",
   "scripts": {
-    "engine": "cd engine && node index.js"
+    "engine": "cd engine && node index.js",
+    "tui": "cd engine && npx tsx tui.js"
   },
   "dependencies": {
     "quincy-claw": "github:nicoacosta/quincy-claw"
