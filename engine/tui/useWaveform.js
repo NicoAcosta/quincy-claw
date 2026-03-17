@@ -7,7 +7,7 @@ const BLOCKS = '▁▂▃▄▅▆▇█';
 function breathingLine(width) {
   const t = Date.now() / 1000;
   return Array.from({ length: width }, (_, i) => {
-    const v = 0.1 + 0.08 * Math.sin(t * 0.8 + i * 0.15);
+    const v = 0.12 + 0.12 * Math.sin(t * 0.8 + i * 0.15);
     return BLOCKS[Math.round(v * 7)];
   }).join('');
 }

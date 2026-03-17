@@ -24,15 +24,11 @@ export function createClaude(onMessage, onError) {
   let consecutiveFailures = 0;
   let lastFailTime = 0;
   let killed = false;
-  let cachedStaticPrompt = null;
-  let promptWarnings = [];
+  // Eagerly build prompt so warnings are available immediately
+  const { prompt: staticPrompt, warnings: promptWarnings } = buildSystemPrompt();
+  let cachedStaticPrompt = staticPrompt;
 
   function getSystemPrompt(engineState) {
-    if (!cachedStaticPrompt) {
-      const { prompt, warnings } = buildSystemPrompt();
-      cachedStaticPrompt = prompt;
-      promptWarnings = warnings;
-    }
     // Append dynamic engine state
     if (engineState?.code) {
       return cachedStaticPrompt +

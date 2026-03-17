@@ -6,7 +6,7 @@ import { ChatPanel } from './ChatPanel.jsx';
 import { InputBar } from './InputBar.jsx';
 import { createClaude } from './claude.js';
 import { stop, play, status as engineStatus } from '../core.js';
-import { setClaudeInstance } from '../tui.js';
+import { setClaudeInstance } from './state.js';
 
 export function App({ port }) {
   const { exit } = useApp();

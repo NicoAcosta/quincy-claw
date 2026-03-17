@@ -17,13 +17,10 @@ import { render } from 'ink';
 import { App } from './tui/App.jsx';
 import { startServer, stopServer } from './server.js';
 import { stop } from './core.js';
-
-// Track Claude instance for cleanup on exit
-let claudeInstance = null;
-export function setClaudeInstance(instance) { claudeInstance = instance; }
+import { getClaudeInstance } from './tui/state.js';
 
 const shutdown = async () => {
-  claudeInstance?.kill();
+  getClaudeInstance()?.kill();
   stop();
   await stopServer();
   process.exit(0);
