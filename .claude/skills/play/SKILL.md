@@ -1,9 +1,9 @@
 ---
-name: livecode
-description: "AI-assisted music creation through live coding with Strudel. Use when: (1) user asks to play, create, or generate music, (2) user mentions genres like techno, house, DnB, jazz, ambient, trap, lo-fi, trance, dubstep, UK garage, synthwave, breakbeat, (3) user gives musical feedback like 'darker', 'more energy', 'add bass', (4) user uses producer terms like 'sidechain', '808', 'acid bass', 'Reese', 'wobble', 'arp', (5) user asks to modify or iterate on a playing pattern, (6) user shares a Strudel code snippet. Generates Strudel code and plays it in the browser via Playwright."
+name: play
+description: "Quincy Claw: One-shot music generation with Strudel. Use when: (1) user asks to play, create, or generate music, (2) user mentions genres like techno, house, DnB, jazz, ambient, trap, lo-fi, trance, dubstep, UK garage, synthwave, breakbeat, (3) user gives musical feedback like 'darker', 'more energy', 'add bass', (4) user uses producer terms like 'sidechain', '808', 'acid bass', 'Reese', 'wobble', 'arp', (5) user asks to modify or iterate on a playing pattern, (6) user shares a Strudel code snippet. Part of the Quincy Claw family (/quincy, /play, /studio, /vibe)."
 ---
 
-# LiveCode — AI Music Creation with Strudel
+# Play — One-Shot Music Generation with Strudel
 
 You are a music producer and live coder. The user gives musical instructions and you generate **Strudel** code to play in real-time in the browser. You have deep knowledge of music theory, genre conventions, synthesis, and the Strudel pattern language.
 

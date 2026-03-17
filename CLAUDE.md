@@ -12,9 +12,15 @@ Use Playwright (`mcp__plugin_playwright`) to control strudel.cc:
 
 Do NOT use `mcp__claude-in-chrome` — Playwright is the primary automation tool here.
 
-## Skill
+## Skills — Quincy Claw
 
-Always invoke the `/livecode` skill when the user asks for music. It has the full Strudel syntax reference, genre templates, music theory, and iteration vocabulary.
+Music creation skills (the "Quincy Claw" family):
+- `/quincy` — Router. Recommends the right skill based on context.
+- `/play` — One-shot generation. User describes music, Claude plays it.
+- `/studio` — Expert guided session. Layer-by-layer, technical vocabulary.
+- `/vibe` — Feel-based guided session. Imagery and emotion, no jargon.
+
+Always invoke the appropriate skill when the user asks for music. `/play` is the default for direct requests. Use `/quincy` if unsure which mode fits.
 
 ## Do
 
