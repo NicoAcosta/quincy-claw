@@ -1,8 +1,10 @@
-import React, { useState, useCallback } from 'react';
-import { Box, Text, useInput, useApp } from 'ink';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
+import { Box, useInput, useApp } from 'ink';
 import { Waveform } from './Waveform.jsx';
 import { StatusBar } from './StatusBar.jsx';
+import { ChatPanel } from './ChatPanel.jsx';
 import { InputBar } from './InputBar.jsx';
+import { createClaude } from './claude.js';
 import { stop, play, status as engineStatus } from '../core.js';
 
 export function App({ port }) {
@@ -10,10 +12,63 @@ export function App({ port }) {
   const [messages, setMessages] = useState([
     { role: 'system', text: 'Welcome to LiveCode TUI. Describe what you want to hear.' },
   ]);
+  const [streamingText, setStreamingText] = useState(null);
+  const [streamingTool, setStreamingTool] = useState(null);
+  const [thinking, setThinking] = useState(false);
+  const [claudeError, setClaudeError] = useState(null);
+  const claudeRef = useRef(null);
+  const toolInputRef = useRef('');
+
+  // Initialize Claude subprocess manager
+  useEffect(() => {
+    const claude = createClaude(
+      (msg) => {
+        switch (msg.type) {
+          case 'text_start':
+            setThinking(false);
+            setStreamingText('');
+            break;
+          case 'text':
+            setStreamingText(prev => (prev ?? '') + msg.content);
+            break;
+          case 'tool_start':
+            setStreamingTool({ name: msg.name, input: '' });
+            toolInputRef.current = '';
+            break;
+          case 'tool_input':
+            toolInputRef.current += msg.content;
+            setStreamingTool(prev => prev ? { ...prev, input: toolInputRef.current } : null);
+            break;
+          case 'done':
+            // Commit the streamed text as a final message
+            setStreamingText(prev => {
+              if (prev !== null && prev.trim()) {
+                setMessages(msgs => [...msgs, { role: 'claude', text: prev.trim() }]);
+              }
+              return null;
+            });
+            setStreamingTool(null);
+            setThinking(false);
+            break;
+        }
+      },
+      (error) => {
+        setClaudeError(error);
+        setThinking(false);
+        setStreamingText(null);
+        setStreamingTool(null);
+        setMessages(prev => [...prev, { role: 'system', text: error }]);
+      }
+    );
+    claudeRef.current = claude;
+    return () => claude.kill();
+  }, []);
 
   const handleSubmit = useCallback((text) => {
     setMessages(prev => [...prev, { role: 'user', text }]);
-    // TODO: send to Claude subprocess (Task 7+8)
+    setThinking(true);
+    setClaudeError(null);
+    claudeRef.current?.send(text);
   }, []);
 
   useInput((input, key) => {
@@ -26,6 +81,17 @@ export function App({ port }) {
     // Ctrl+L → clear chat
     if (input === 'l' && key.ctrl) {
       setMessages([{ role: 'system', text: 'Chat cleared.' }]);
+      setStreamingText(null);
+      setStreamingTool(null);
+      setThinking(false);
+      return;
+    }
+
+    // Ctrl+R → restart Claude
+    if (input === 'r' && key.ctrl) {
+      claudeRef.current?.restart();
+      setClaudeError(null);
+      setMessages(prev => [...prev, { role: 'system', text: 'Claude reconnected.' }]);
       return;
     }
   });
@@ -34,23 +100,16 @@ export function App({ port }) {
     <Box flexDirection="column" height={process.stdout.rows || 24}>
       <Waveform />
       <StatusBar />
-      <Box
-        flexDirection="column"
-        flexGrow={1}
-        borderStyle="single"
-        borderTop
-        borderBottom={false}
-        borderLeft={false}
-        borderRight={false}
-        paddingLeft={1}
-      >
-        {messages.map((msg, i) => (
-          <Text key={`msg-${i}`} color={msg.role === 'user' ? 'yellow' : msg.role === 'system' ? 'gray' : 'white'}>
-            {msg.role === 'user' ? `you: ${msg.text}` : msg.role === 'system' ? msg.text : `claude: ${msg.text}`}
-          </Text>
-        ))}
-      </Box>
-      <InputBar onSubmit={handleSubmit} />
+      <ChatPanel
+        messages={messages}
+        streamingText={streamingText}
+        streamingTool={streamingTool}
+        thinking={thinking}
+      />
+      <InputBar
+        onSubmit={handleSubmit}
+        disabled={thinking || claudeRef.current?.isActive?.()}
+      />
     </Box>
   );
 }
