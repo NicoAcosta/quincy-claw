@@ -5,9 +5,10 @@
  * POST /stop                     → Stop playback
  * POST /swap    { code: "..." }  → Hot-swap code without interrupting flow
  * GET  /status                   → Current engine state
+ * GET  /health                   → Diagnostics: memory, GC, audio watchdog
  */
 import http from 'node:http';
-import { init, play, swap, stop, status } from './core.js';
+import { init, play, swap, stop, status, getHealthStats } from './core.js';
 
 const PORT = Number(process.env.PORT) || 3456;
 
@@ -65,6 +66,10 @@ const routes = {
 
   'GET /status': async (_req, res) => {
     json(res, 200, status());
+  },
+
+  'GET /health': async (_req, res) => {
+    json(res, 200, getHealthStats());
   },
 };
 
