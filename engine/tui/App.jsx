@@ -11,7 +11,7 @@ import { setClaudeInstance } from './state.js';
 export function App({ port }) {
   const { exit } = useApp();
   const [messages, setMessages] = useState([
-    { role: 'system', text: 'Welcome to LiveCode TUI. Describe what you want to hear.' },
+    { role: 'system', text: 'Quincy Claw — three ways to make music:\n\n  /play    — Describe what you want, I\'ll play it. Fast and direct.\n  /studio  — Build a track together, layer by layer. You make the decisions.\n  /vibe    — Describe a feeling or scene, I\'ll translate it to sound.\n\nOr just tell me what you want to hear.' },
   ]);
   const [streamingText, setStreamingText] = useState(null);
   const [streamingTool, setStreamingTool] = useState(null);
