@@ -2,7 +2,7 @@ import React from 'react';
 import { Box, Text } from 'ink';
 
 export function ChatMessage({ role, text, streaming }) {
-  const prefix = role === 'user' ? 'you' : role === 'claude' ? 'claude' : '';
+  const prefix = role === 'user' ? 'you' : role === 'claude' ? 'claudio' : '';
   const color = role === 'user' ? 'yellow' : role === 'system' ? 'gray' : 'white';
 
   // Detect and style code blocks

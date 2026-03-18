@@ -21,7 +21,7 @@ export function ChatPanel({ messages, streamingText, streamingTool, thinking }) 
       ))}
 
       {thinking && streamingText === null && (
-        <Text color="gray" dimColor>claude is thinking...</Text>
+        <Text color="gray" dimColor>claudio is thinking...</Text>
       )}
 
       {streamingTool && (
