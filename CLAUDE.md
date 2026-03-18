@@ -33,5 +33,10 @@ When the user asks for music, invoke the appropriate skill:
 - `/play` — One-shot generation. Direct requests go here.
 - `/studio` — Expert guided session. Layer-by-layer, technical control.
 - `/vibe` — Feel-based guided session. Imagery and emotion, no jargon.
+- `/play-flow` — One-shot evolving track (8-15 min). Full arrangement with sections, builds, drops, breakdowns via sequential `/swap` calls.
+- `/studio-flow` — Expert guided palette (6 stages) → autonomous arrangement into a full evolving track.
+- `/vibe-flow` — Feel-based guided mood (4 stages) → evolving journey described in sensory language.
+
+Flow skills generate tracks that evolve autonomously: Claude plans an arrangement, then executes it as chunks of 2-3 `/swap` calls with `sleep` between them. The user can intervene at checkpoints between chunks.
 
 Skills contain the full Strudel reference, genre templates, do/don't rules, and iteration vocabulary. CLAUDE.md only covers project-wide context (playback mechanics above).

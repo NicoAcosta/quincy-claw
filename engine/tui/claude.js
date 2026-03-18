@@ -25,6 +25,7 @@ export function createClaude(onMessage, onError) {
   let lastFailTime = 0;
   let killed = false;
   let killGeneration = 0;
+  let flowMode = false;
   // Eagerly build prompt so warnings are available immediately
   const { prompt: staticPrompt, warnings: promptWarnings } = buildSystemPrompt();
   let cachedStaticPrompt = staticPrompt;
@@ -43,6 +44,12 @@ export function createClaude(onMessage, onError) {
   function send(text) {
     if (killed) return;
 
+    // Detect flow mode from user message
+    if (/\/(play-flow|studio-flow|vibe-flow)\b/.test(text)) {
+      flowMode = true;
+    }
+    const maxTurns = flowMode ? '10' : '3';
+
     const myGeneration = killGeneration;
     const engineState = status();
     const systemPrompt = getSystemPrompt(engineState);
@@ -53,7 +60,8 @@ export function createClaude(onMessage, onError) {
       '--verbose',
       '--include-partial-messages',
       '--allowedTools', 'Bash(curl:*)',
-      '--max-turns', '3',
+      '--allowedTools', 'Bash(sleep:*)',
+      '--max-turns', maxTurns,
       '--append-system-prompt', systemPrompt,
     ];
 
@@ -189,6 +197,7 @@ export function createClaude(onMessage, onError) {
   function restart() {
     killed = false;
     consecutiveFailures = 0;
+    flowMode = false;
   }
 
   function isActive() {

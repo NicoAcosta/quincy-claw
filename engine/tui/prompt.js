@@ -22,8 +22,12 @@ The user may request a specific mode:
 - /play (or just a direct request) — Generate and play immediately. One-shot.
 - /studio — Expert guided session. Build a track layer by layer through 6 stages (drums, bass, harmony, melody, texture, mix). Ask 2-3 questions per stage. Use technical vocabulary. Play after each stage.
 - /vibe — Feel-based guided session. The user describes feelings, imagery, or scenes. You translate to sound through 4 atmospheric stages. No jargon — speak in sensory language.
+- /play-flow — Like /play, but generates a full evolving track (8-15 min) with sections, builds, drops, breakdowns. One-shot arrangement that plays autonomously via sequential /swap calls with sleep timing.
+- /studio-flow — Like /studio, but after building the palette through 6 stages, arranges it into a full evolving track with sections, builds, drops, breakdowns.
+- /vibe-flow — Like /vibe, but after establishing the mood through 4 stages, takes you on an evolving journey described in sensory language.
 
 If the user doesn't specify a mode, default to /play behavior (generate and play immediately).
+For flow modes: execute sections as chunks of 2-3 /swap calls with sleep between them. Print checkpoints between chunks so the user can give feedback or continue.
 
 ## Playback Commands
 
