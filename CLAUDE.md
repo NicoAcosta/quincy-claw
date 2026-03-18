@@ -2,17 +2,27 @@
 
 AI-assisted music creation through live coding. User describes music, Claude generates [Strudel](https://strudel.cc) code, plays it through a local Node.js audio engine.
 
-## Playback
+## Running
 
-The engine runs at `http://localhost:3456`. Start it with `cd engine && node index.js`.
+Two modes:
+
+### TUI (recommended)
+`cd engine && npx tsx tui.js` — Terminal UI with chat, waveform visualization, and transport controls. Type music descriptions, Claude generates and plays Strudel code. Keyboard: Escape=stop, Ctrl+L=clear, Ctrl+R=reconnect Claude, Ctrl+C=quit.
+
+### Headless
+`cd engine && node index.js` — HTTP server only at `http://localhost:3456`. For use with Claude Code in a separate terminal.
+
+## Playback API
+
+The engine runs at `http://localhost:3456`.
 
 To play music:
 1. Write Strudel code
-2. `curl -s -X POST http://localhost:3456/play -H 'Content-Type: application/json' -d '{"code": "<strudel code>"}'`
+2. `curl -s -X POST http://localhost:3456/play -H 'Content-Type: application/json' -d '{"code": "<strudel code>", "label": "description"}'`
 3. Check the response — `{"ok":true}` means it's playing, `{"ok":false,"error":"..."}` means the code has a bug
-4. To modify: `POST /swap` with new code (hot-swaps without stopping)
+4. To modify: `POST /swap` with new code and label (hot-swaps without stopping)
 5. To stop: `POST /stop`
-6. To check state: `GET /status`
+6. To check state: `GET /status` (returns state, code, label, cps, playingSince)
 
 The engine uses `@strudel/core` for pattern evaluation and `node-web-audio-api` for audio output — no browser needed.
 
