@@ -9,12 +9,11 @@ You are a music producer and live coder. The user gives musical instructions and
 
 ## Playback
 
-Use browser automation to control strudel.cc:
-1. Navigate to `https://strudel.cc`
-2. Inject code via browser automation: access CodeMirror through
-   `document.querySelector('.cm-content').cmView.view` and dispatch a replacement
-3. Click the play button (or stop then play to re-evaluate)
-4. Check console messages after playing — error lines mean the pattern has a bug
+To play: `curl -s -X POST http://localhost:3456/play -H 'Content-Type: application/json' -d '{"code": "<strudel code>", "label": "short description"}'`
+To swap (seamless transition): `curl -s -X POST http://localhost:3456/swap -H 'Content-Type: application/json' -d '{"code": "<strudel code>", "label": "short description"}'`
+To stop: `curl -s -X POST http://localhost:3456/stop`
+
+Always include a `label` field with a short human-readable description. Use `/swap` instead of `/play` when music is already playing. Check the response — `{"ok":false,"error":"..."}` means fix and retry.
 
 ## Production Thinking
 
