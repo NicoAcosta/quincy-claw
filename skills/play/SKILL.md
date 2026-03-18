@@ -142,7 +142,7 @@ When the user gives feedback, map it to specific Strudel modifications:
 11. **NEVER use `.voicings()`** — it crashes. Spell out chord notes manually.
 12. **Use `.rangex()`** for frequency sweeps — exponential mapping sounds more natural
 13. **Don't use `.vowel()` with mini-notation** like `"<a e i o u>"` — causes `getTrigger` errors. Use a single static vowel: `.vowel("a")`
-14. **Don't use `s("shaker")`** — not in the default sample bank. For 16th-note shimmer, use `s("hh*16").hpf(8000)` with low gain instead.
+14. **Invalid sample names** — these are NOT in the default dirt-samples bank: `oh` (use `808oh` or `ho`), `rim` (use `rm`), `ride` (use `hh27`), `crash` (use `cr`), `tambourine` (use `tink`), `conga`/`bongo` (use `hand`), `piano` (use FM synth or `casio`), `shaker` (use `s("hh*16").hpf(8000)`).
 
 ---
 

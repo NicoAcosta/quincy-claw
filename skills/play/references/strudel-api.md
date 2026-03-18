@@ -41,7 +41,7 @@ s("bd,hh")           // play simultaneously (comma = stack in mini-notation)
 ```js
 s("bd sd hh cp")                  // samples (Dirt Samples bank)
 s("bd:2")                         // sample variation by index
-note("c3 e3 g3").sound("piano")   // note + instrument
+note("c3 e3 g3").sound("pluck")   // note + instrument
 note("c3 e3 g3").s("sawtooth")    // synth oscillator
 ```
 
@@ -286,7 +286,7 @@ stack(
 ## Sample Bank Reference
 
 ### Drum Machines
-- **808**: `808bd`, `808sd`, `808cy`, `808oh`, `808ch`, `808mt`, `808ht`, `808lt`
+- **808**: `808bd`, `808sd`, `808cy`, `808oh`, `808hc`, `808mt`, `808ht`, `808lt`, `808lc`, `808mc`
 - **909**: `909`
 - **Other machines**: `electro1`, `drumtraks`, `linnhats`, `tech`
 
@@ -297,16 +297,17 @@ stack(
 ### Acoustic Drums
 - `bd` — kick (10+ variations)
 - `sd` — snare
-- `hh` — closed hi-hat, `oh` — open hi-hat
-- `cp` — clap, `rim` — rimshot
-- `lt`, `mt`, `ht` — toms (low/mid/high)
-- `ride`, `crash` — cymbals
-- `tambourine` (NOTE: `shaker` is NOT in the default bank — use `s("hh*16").hpf(8000)` for shaker-like shimmer)
+- `hh` — closed hi-hat (13 variants), `ho` — open hi-hat
+- `cp` — clap, `rm` — rimshot, `rs` — rimshot alt
+- `lt`, `mt`, `ht` — toms (low/mid/high, 16 variants each)
+- `cr` — crash cymbal (6 variants), `hc` — closed hi-hat alt
+- NOTE: `oh`, `rim`, `ride`, `crash`, `tambourine`, `shaker` are NOT in the default bank. Use `808oh`/`ho` for open hat, `rm` for rimshot, `cr` for crash, `tink` for tambourine-like, `s("hh*16").hpf(8000)` for shaker shimmer.
 
 ### Percussion
 - `tabla`, `tabla2` — Indian tabla
-- `conga`, `bongo` — Latin percussion
+- `hand` — hand drums (17 variants, use for conga/bongo)
 - `can`, `coins`, `metal`, `tink`, `tok` — found sounds/metallic
+- `perc` — misc percussion (6 variants), `clak`, `click`, `stomp`
 
 ### Bass
 - `bass`, `bass0`, `bass1`, `bass2`, `bass3` — various bass samples
@@ -319,7 +320,7 @@ stack(
 - `arpy` — arpeggio synth
 - `pluck` — plucked strings
 - `pad`, `padlong` — pad sounds
-- `piano` — piano
+- `casio` — Casio keyboard sounds
 
 ### Atmospheric & FX
 - `feelfx` — textural effects

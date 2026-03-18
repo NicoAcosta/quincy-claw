@@ -210,11 +210,11 @@ A track should sound like it comes from one world. Mixing acoustic jazz samples 
 | Genre | Kick | Snare | Hats | Why |
 |-------|------|-------|------|-----|
 | Techno | `bd:3` or `bd:5` | `cp` | `hh` | Clean, punchy, synthetic |
-| House | `bd:1` | `cp`, `sd:3` | `hh`, `oh` | Warm, classic |
+| House | `bd:1` | `cp`, `sd:3` | `hh`, `808oh` | Warm, classic |
 | Trap | `808bd` | `cp:4` | `hh*16` (varied `.gain()`) | Deep 808, crispy hats |
 | Boom bap | `bd:0`, `bd:4` | `sd:1`, `sd:5` | `hh` | Dusty, punchy |
 | DnB | `bd:5` | `sd:4` | `hh*4` | Tight, fast |
-| Jazz | `bd:0` | `sd:1` (brushes feel) | `ride` or `hh` | Natural, room sound |
+| Jazz | `bd:0` | `sd:1` (brushes feel) | `hh27` or `hh` | Natural, room sound |
 | Ambient | rarely used | rarely used | rarely used | Texture over rhythm |
 
 ---

@@ -182,7 +182,7 @@ stack(
 
 - NEVER use `.voicings()` — spell out chord notes manually
 - Don't use `.vowel()` with mini-notation patterns — single static vowel only
-- Don't use `s("shaker")` — use `s("hh*16").hpf(8000)` with low gain
+- Invalid samples — NOT in dirt-samples: `oh` (use `808oh`/`ho`), `rim` (use `rm`), `ride` (use `hh27`), `crash` (use `cr`), `tambourine` (use `tink`), `conga`/`bongo` (use `hand`), `piano` (use FM synth), `shaker` (use `hh*16` + `.hpf(8000)`)
 - Always set tempo with `.cpm(bpm/4)`
 - Keep to 6-8 layers max
 - Read the genre template before starting

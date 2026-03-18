@@ -21,7 +21,7 @@ The offbeat hat IS house music. Four-on-the-floor kick + offbeat open hat = inst
 ```js
 // Core house groove
 s("bd ~ ~ ~ bd ~ ~ ~ bd ~ ~ ~ bd ~ ~ ~")  // 4otf kick
-s("~ ~ oh ~ ~ ~ oh ~ ~ ~ oh ~ ~ ~ oh ~")  // offbeat open hat = bounce
+s("~ ~ 808oh ~ ~ ~ 808oh ~ ~ ~ 808oh ~ ~ ~ 808oh ~")  // offbeat open hat = bounce
 s("~ ~ ~ ~ cp ~ ~ ~ ~ ~ ~ ~ cp ~ ~ ~")    // clap on 2 and 4
 s("hh*8").gain("0.5 0.3 0.5 0.3 0.5 0.3 0.5 0.3") // 8th hats, accented
 ```
@@ -89,7 +89,7 @@ Ride cymbal leads. Kick and snare "comp" — they comment on the melody, not dri
 
 ```js
 // Core jazz groove (at 120 BPM)
-s("ride*4").gain("0.5 0.35 0.5 0.35")       // ride = pulse
+s("hh27*4").gain("0.5 0.35 0.5 0.35")       // ride-like cymbal = pulse
 s("~ ~ hh ~ ~ ~ hh ~").gain(0.25)           // ghost hats
 s("bd ~ ~ ~ ~ bd ~ ~ ~ ~ ~ ~ bd ~ ~ ~")    // kick comps
 s("~ ~ ~ ~ ~ ~ sd:1 ~ ~ ~ ~ ~ ~ ~ ~ sd:1") // sparse snare
