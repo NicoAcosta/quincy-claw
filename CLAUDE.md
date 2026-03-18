@@ -7,10 +7,10 @@ AI-assisted music creation through live coding. User describes music, Claude gen
 Two modes:
 
 ### TUI (recommended)
-`cd engine && npx tsx tui.js` — Terminal UI with chat, waveform visualization, and transport controls. Type music descriptions, Claude generates and plays Strudel code. Keyboard: Escape=stop, Ctrl+L=clear, Ctrl+R=reconnect Claude, Ctrl+C=quit.
+`cd engine && npx tsx --max-old-space-size=4096 tui.js` — Terminal UI with chat, waveform visualization, and transport controls. Type music descriptions, Claude generates and plays Strudel code. Keyboard: Escape=stop, Ctrl+L=clear, Ctrl+R=reconnect Claude, Ctrl+C=quit.
 
 ### Headless
-`cd engine && node index.js` — HTTP server only at `http://localhost:3456`. For use with Claude Code in a separate terminal.
+`cd engine && node --max-old-space-size=4096 index.js` — HTTP server only at `http://localhost:3456`. For use with Claude Code in a separate terminal.
 
 ## Playback API
 

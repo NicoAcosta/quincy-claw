@@ -12,7 +12,7 @@
   ],
   "license": "MIT",
   "scripts": {
-    "engine": "cd engine && node index.js",
-    "tui": "cd engine && npx tsx tui.js"
+    "engine": "cd engine && node --max-old-space-size=4096 index.js",
+    "tui": "cd engine && npx tsx --max-old-space-size=4096 tui.js"
   }
 }
